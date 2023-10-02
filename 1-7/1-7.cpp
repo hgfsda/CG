@@ -22,8 +22,8 @@ GLuint vertexShader; //--- 버텍스 세이더 객체
 GLuint fragmentShader; //--- 프래그먼트 세이더 객체
 int cnt, save_draw_check[10];   // 현재 그려진 도형 개수, 정해진 도형 저장
 float r[10], g[10], b[10];
-GLfloat Shape[10][12];    // 도형의 좌표
-GLfloat colors[10][12];  // 도형 꼭지점의 색상
+GLfloat Shape[10][18];    // 도형의 좌표
+GLfloat colors[10][18];  // 도형 꼭지점의 색상
 GLuint vao, vbo[10];
 
 void reset() {
@@ -31,7 +31,7 @@ void reset() {
 	for (int i = 0; i < 10; ++i) {
 		save_draw_check[i] = 0;
 		r[i] = (rand() % 101) * 0.01, g[i] = (rand() % 101) * 0.01, b[i] = (rand() % 101) * 0.01;
-		for (int j = 0; j < 12; ++j) {
+		for (int j = 0; j < 18; ++j) {
 			Shape[i][j] = 0;
 			if (j % 3 == 0) colors[i][j] = r[i];
 			else if (j % 3 == 1) colors[i][j] = g[i];
@@ -56,6 +56,8 @@ void main(int argc, char** argv)
 	InitBuffer();
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(Reshape);
+	glutKeyboardFunc(Keyboard);
+	glutMouseFunc(Mouse);
 	glutMainLoop();
 }
 
@@ -80,23 +82,13 @@ void InitBuffer()
 	glGenVertexArrays(1, &vao); //--- VAO 를 지정하고 할당하기
 	glBindVertexArray(vao); //--- VAO를 바인드하기
 	glGenBuffers(2, vbo); //--- 2개의 VBO를 지정하고 할당하기
-	//--- 1번째 VBO를 활성화하여 바인드하고, 버텍스 속성 (좌표값)을 저장
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-	//--- 변수 diamond 에서 버텍스 데이터 값을 버퍼에 복사한다.
-	//--- triShape 배열의 사이즈: 9 * float
 	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(GLfloat), Shape, GL_STATIC_DRAW);
-	//--- 좌표값을 attribute 인덱스 0번에 명시한다: 버텍스 당 3* float
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	//--- attribute 인덱스 0번을 사용가능하게 함
 	glEnableVertexAttribArray(0);
-	//--- 2번째 VBO를 활성화 하여 바인드 하고, 버텍스 속성 (색상)을 저장
 	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-	//--- 변수 colors에서 버텍스 색상을 복사한다.
-	//--- colors 배열의 사이즈: 9 *float 
 	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(GLfloat), colors, GL_STATIC_DRAW);
-	//--- 색상값을 attribute 인덱스 1번에 명시한다: 버텍스 당 3*float
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	//--- attribute 인덱스 1번을 사용 가능하게 함.
 	glEnableVertexAttribArray(1);
 }
 
@@ -193,5 +185,45 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 }
 
 void Mouse(int button, int state, int x, int y) {
+	float normalized_x, normalized_y;
+	float dis_x, dis_y;
+	dis_x = (rand() % 100 + 200) * 0.001;  // 0.2~0.3길이
+	dis_y = (rand() % 600 - 300) * 0.001;  // -0.3 ~ 0.3
 
+	normalized_x = (2.0 * x / 800) - 1.0;
+	normalized_y = 1.0 - (2.0 * y / 600);
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		if (save_draw_check[cnt] != 0 && cnt < 10) {
+			if (save_draw_check[cnt] == 1) {
+				Shape[cnt][0] = normalized_x;
+				Shape[cnt][1] = normalized_y;
+			}
+			else if (save_draw_check[cnt] == 2) {
+				Shape[cnt][0] = normalized_x - dis_x;
+				Shape[cnt][1] = normalized_y - dis_y;
+				Shape[cnt][3] = normalized_x + dis_x;
+				Shape[cnt][4] = normalized_y + dis_y;
+			}
+			else if (save_draw_check[cnt] == 3) {
+				Shape[cnt][0] = normalized_x;
+				Shape[cnt][1] = normalized_y + 0.2;
+				Shape[cnt][3] = normalized_x - 0.17;
+				Shape[cnt][4] = normalized_y - 0.1;
+				Shape[cnt][6] = normalized_x + 0.17;
+				Shape[cnt][7] = normalized_y - 0.1;
+			}
+			else if (save_draw_check[cnt] == 4) {
+				Shape[cnt][0] = normalized_x - 0.15;
+				Shape[cnt][1] = normalized_y - 0.15;
+				Shape[cnt][3] = Shape[cnt][9] = normalized_x - 0.15;
+				Shape[cnt][4] = Shape[cnt][10] = normalized_y + 0.15;
+				Shape[cnt][6] = Shape[cnt][12] = normalized_x + 0.15;
+				Shape[cnt][7] = Shape[cnt][13] = normalized_y - 0.15;
+				Shape[cnt][15] = normalized_x + 0.15;
+				Shape[cnt][16] = normalized_y + 0.15;
+			}
+			cnt++;
+			save_draw_check[cnt] = save_draw_check[cnt - 1];
+		}
+	}
 }
