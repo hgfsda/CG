@@ -178,6 +178,41 @@ void make_fragmentShaders()
 	}
 }
 
+void move_shape(float dir_x, float dir_y) {
+	for (int i = 0; i < cnt; ++i) {
+		if (save_draw_check[i] == 1) {
+			Shape[i][0] += dir_x;
+			Shape[i][1] += dir_y;
+		}
+		else if (save_draw_check[i] == 2) {
+			Shape[i][0] += dir_x;
+			Shape[i][1] += dir_y;
+			Shape[i][3] += dir_x;
+			Shape[i][4] += dir_y;
+		}
+		else if (save_draw_check[i] == 3) {
+			Shape[i][0] += dir_x;
+			Shape[i][1] += dir_y;
+			Shape[i][3] += dir_x;
+			Shape[i][4] += dir_y;
+			Shape[i][6] += dir_x;
+			Shape[i][7] += dir_y;
+		}
+		else if (save_draw_check[i] == 4) {
+			Shape[i][0] += dir_x;
+			Shape[i][1] += dir_y;
+			Shape[i][3] = Shape[i][9] += dir_x;
+			Shape[i][4] = Shape[i][10] += dir_y;
+			Shape[i][6] = Shape[i][12] += dir_x;
+			Shape[i][7] = Shape[i][13] += dir_y;
+			Shape[i][15] += dir_x;
+			Shape[i][16] += dir_y;
+		}
+	}
+	InitBuffer();
+	drawScene();
+}
+
 GLvoid Keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case 'p':    // 점 그리기
@@ -193,12 +228,16 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 		save_draw_check[cnt] = 4;
 		break;
 	case 'w':    // 위로 이동
+		move_shape(0, 0.05);
 		break;
 	case 'a':    // 왼쪽으로 이동
+		move_shape(-0.05, 0);
 		break;
 	case 's':    // 아래로 이동
+		move_shape(0, -0.05);
 		break;
 	case 'd':    // 오른쪽으로 이동
+		move_shape(0.05, 0);
 		break;
 	case 'c':   // 모든 도형 삭제
 		reset();
