@@ -228,6 +228,18 @@ void Mouse(int button, int state, int x, int y) {
 	normalized_x = (2.0 * x / 800) - 1.0;
 	normalized_y = 1.0 - (2.0 * y / 600);
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		if (normalized_x >= 0 && normalized_y >= 0) {  // 1사분면일때
+			printf("1");
+		}
+		else if (normalized_x < 0 && normalized_y >= 0) {   // 2사분면일때
+			printf("2");
+		}
+		else if (normalized_x < 0 && normalized_y < 0) {   // 3사분면일때
+			printf("3");
+		}
+		else if (normalized_x >= 0 && normalized_y < 0) {   // 4사분면일때
+			printf("4");
+		}
 	}
 }
 
