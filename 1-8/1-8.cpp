@@ -21,12 +21,14 @@ char* filetobuf(const char* file);
 GLuint shaderProgramID; //--- 세이더 프로그램 이름
 GLuint vertexShader; //--- 버텍스 세이더 객체
 GLuint fragmentShader; //--- 프래그먼트 세이더 객체
+BOOL shape_mode = true;
 float r[6], g[6], b[6];
 GLfloat Shape[6][9];    // 도형의 좌표
 GLfloat colors[6][9];  // 도형 꼭지점의 색상
 GLuint vao[6], vbo[12];
 
 void reset() {
+	shape_mode = true;
 	for (int i = 0; i < 2; ++i) {
 		for (int j = 0; j < 9; ++j) {
 			Shape[i][j] = 0;
@@ -112,7 +114,10 @@ GLvoid drawScene() {
 			glDrawArrays(GL_LINES, 0, 2);
 		}
 		else
-			glDrawArrays(GL_TRIANGLES, 0, 3);
+			if(shape_mode == true)
+				glDrawArrays(GL_TRIANGLES, 0, 3);
+			else
+				glDrawArrays(GL_LINE_LOOP, 0, 3);
 	}
 
 	glEnableVertexAttribArray(PosLocation);
@@ -207,8 +212,12 @@ void make_fragmentShaders()
 GLvoid Keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case 'a':    //  도형 면으로 그리기
+		shape_mode = true;
+		drawScene();
 		break;
 	case 'b':    // 도형 선으로 그리기
+		shape_mode = false;
+		drawScene();
 		break;
 	case 'r':   // 모든 도형 삭제
 		reset();
