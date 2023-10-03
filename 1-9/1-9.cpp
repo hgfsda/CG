@@ -13,6 +13,9 @@ void make_shaderProgram();
 void InitBuffer();
 void reset();
 void Time1(int value);
+void Time2(int value);
+void Time3(int value);
+void Time4(int value);
 GLvoid drawScene();
 GLvoid Reshape(int w, int h);
 GLvoid Keyboard(unsigned char key, int x, int y);
@@ -26,14 +29,16 @@ float r[4], g[4], b[4];
 float sx[4], sy[4];
 int dir_shape[4];
 int check1 = 0, check2 = 0, check3 = 0, check4 = 0;
+int save_location_cnt[4];   // 지그재그 이동에서 위 아래로 움직이는 함수
 GLfloat Shape[4][9];    // 도형의 좌표
 GLfloat colors[4][9];  // 도형 꼭지점의 색상
 GLuint vao[4], vbo[8];
 
 void reset() {
-	check1 = 0;
+	check1 = check2 = check3 = check4 = 0;
 	for (int i = 0; i < 4; ++i) {
 		dir_shape[i] = 3;
+		save_location_cnt[i] = 0;
 		r[i] = (rand() % 101) * 0.01, g[i] = (rand() % 101) * 0.01, b[i] = (rand() % 101) * 0.01;
 		for (int j = 0; j < 9; ++j) {
 			Shape[i][j] = 0;
@@ -73,6 +78,9 @@ void main(int argc, char** argv)
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(Keyboard);
 	glutTimerFunc(10, Time1, 1);
+	glutTimerFunc(10, Time2, 1);
+	glutTimerFunc(10, Time3, 1);
+	glutTimerFunc(10, Time4, 1);
 	glutMainLoop();
 }
 
@@ -273,21 +281,128 @@ void Time1(int value) {
 	glutTimerFunc(10, Time1, 1);
 }
 
+void Time2(int value) {
+	if (check2 == 1) {
+		for (int i = 0; i < 4; ++i) {
+			if (dir[i] == 0) {  // 오른쪽 이동 후 아래로 이동
+				if (sx[i] + 0.1 < 1.0) {
+					dir_shape[i] = 0;
+					sx[i] = sx[i] + 0.01;
+				}
+				else {
+					sy[i] = sy[i] - 0.01;
+					++save_location_cnt[i];
+					dir_shape[i] = 1;
+					if (save_location_cnt[i] == 20) {
+						save_location_cnt[i] = 0;
+						dir[i] = 1;
+					}
+					if (sy[i] - 0.1 <= -1.0)
+						dir[i] = 3;
+				}
+			}
+			else if (dir[i] == 1) {  // 왼쪽 이동 후 아래로 이동
+				if (sx[i] - 0.1 > -1.0) {
+					sx[i] = sx[i] - 0.01;
+					dir_shape[i] = 1;
+				}
+				else {
+					sy[i] = sy[i] - 0.01;
+					++save_location_cnt[i];
+					dir_shape[i] = 0;
+					if (save_location_cnt[i] == 20) {
+						save_location_cnt[i] = 0;
+						dir[i] = 0;
+					}
+					if (sy[i] - 0.1 <= -1.0)
+						dir[i] = 2;
+				}
+			}
+			else if (dir[i] == 2) {  // 오른쪽 이동 후 위로 이동
+				if (sx[i] + 0.1 < 1.0) {
+					sx[i] = sx[i] + 0.01;
+					dir_shape[i] = 0;
+				}
+				else {
+					sy[i] = sy[i] + 0.01;
+					++save_location_cnt[i];
+					dir_shape[i] = 1;
+					if (save_location_cnt[i] == 20) {
+						save_location_cnt[i] = 0;
+						dir[i] = 3;
+					}
+					if (sy[i] + 0.1 >= 1.0)
+						dir[i] = 1;
+				}
+			}
+			else if (dir[i] == 3) {  // 왼쪽 이동 후 위로 이동
+				if (sx[i] - 0.1 > -1.0) {
+					sx[i] = sx[i] - 0.01;
+					dir_shape[i] = 1;
+				}
+				else {
+					sy[i] = sy[i] + 0.01;
+					++save_location_cnt[i];
+					dir_shape[i] = 0;
+					if (save_location_cnt[i] == 20) {
+						save_location_cnt[i] = 0;
+						dir[i] = 2;
+					}
+					if (sy[i] + 0.1 >= 1.0)
+						dir[i] = 0;
+				}
+			}
+			dir_check(dir_shape[i], i);
+		}
+		InitBuffer();
+		drawScene();
+	}
+	glutTimerFunc(10, Time2, 1);
+}
+
+void Time3(int value) {
+}
+
+void Time4(int value) {
+}
+
 GLvoid Keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case '1':    //  튕기기
-		check1 = 1 - check1;
-		for (int i = 0; i < 4; ++i)
-			dir[i] = rand() % 4;
+		if (check1 == 0) {
+			for (int i = 0; i < 4; ++i)
+				dir[i] = rand() % 4;
+			check1 = 1;
+			check2 = check3 = check4 = 0;
+		}
+		else
+			check1 = 0;
 		break;
 	case '2':    //  좌우로 지그재그
-		printf("2");
+		if (check2 == 0) {
+			for (int i = 0; i < 4; ++i)
+				dir[i] = rand() % 4;
+			check2 = 1;
+			check1 = check3 = check4 = 0;
+		}
+		else
+			check2 = 0;
 		break;
 	case '3':    //  사각 스파이럴
-		printf("3");
+		if (check3 == 0) {
+			check3 = 1;
+			check1 = check2 = check4 = 0;
+		}
+		else
+			check3 = 0;
 		break;
 	case '4':    //  원 스파이럴
-		printf("4");
+		if (check4 == 0) {
+			check4 = 1;
+			check1 = check3 = check2 = 0;
+		}
+		else
+			check4 = 0;
 		break;
 	case 'r':   // 리셋
 		reset();
