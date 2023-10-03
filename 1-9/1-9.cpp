@@ -31,6 +31,7 @@ int dir_shape[4];
 int check1 = 0, check2 = 0, check3 = 0, check4 = 0;
 int save_location_cnt[4];   // 지그재그 이동에서 위 아래로 움직이는 함수
 float max[4]; //  3번에서 얼마나 작아졌는지 
+int angle = 0;   // 4번 각도
 GLfloat Shape[4][9];    // 도형의 좌표
 GLfloat colors[4][9];  // 도형 꼭지점의 색상
 GLuint vao[4], vbo[8];
@@ -405,6 +406,22 @@ void Time3(int value) {
 }
 
 void Time4(int value) {
+	float radian = angle * 3.14 / 180.0;
+	if (check4 == 1) {
+		for (int i = 0; i < 4; ++i) {
+			sx[i] += radian * cos(radian) * 0.001;
+			sy[i] += radian * sin(radian) * 0.001;
+			if (angle < 1080)
+				++angle;
+			else
+				angle = 0;
+
+			dir_check(dir_shape[i], i);
+		}
+		InitBuffer();
+		drawScene();
+	}
+	glutTimerFunc(10, Time4, 1);
 }
 
 GLvoid Keyboard(unsigned char key, int x, int y) {
@@ -443,6 +460,8 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 		break;
 	case '4':    //  원 스파이럴
 		if (check4 == 0) {
+			for (int i = 0; i < 4; ++i)
+				dir_shape[i] = 3;
 			check4 = 1;
 			check1 = check3 = check2 = 0;
 		}
