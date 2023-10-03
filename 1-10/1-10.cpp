@@ -22,13 +22,22 @@ char* filetobuf(const char* file);
 GLuint shaderProgramID; //--- 세이더 프로그램 이름
 GLuint vertexShader; //--- 버텍스 세이더 객체
 GLuint fragmentShader; //--- 프래그먼트 세이더 객체
-float r[6], g[6], b[6];
+float r, g, b;
+float sx[5], sy[5];
 GLfloat Shape[5][300];    // 도형의 좌표
 GLfloat colors[5][300];  // 도형 꼭지점의 색상
 GLuint vao[5], vbo[10];
 
 void reset() {
-
+	r = (rand() % 101) * 0.01;
+	g = (rand() % 101) * 0.01;
+	b = (rand() % 101) * 0.01;
+	for (int i = 0; i < 5; ++i) {
+		for (int j = 0; j < 300; ++j) {
+			Shape[i][j] = 0;
+			colors[i][j] = 1.0;
+		}
+	}
 }
 
 void main(int argc, char** argv)
@@ -54,7 +63,7 @@ void main(int argc, char** argv)
 }
 
 GLvoid drawScene() {
-	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glClearColor(r, g, b, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glUseProgram(shaderProgramID);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -194,6 +203,9 @@ void Mouse(int button, int state, int x, int y) {
 
 	normalized_x = (2.0 * x / 800) - 1.0;
 	normalized_y = 1.0 - (2.0 * y / 600);
+	r = (rand() % 101) * 0.01;
+	g = (rand() % 101) * 0.01;
+	b = (rand() % 101) * 0.01;
 }
 
 char* filetobuf(const char* file)
