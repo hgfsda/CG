@@ -12,9 +12,11 @@ void make_fragmentShaders();
 void make_shaderProgram();
 void InitBuffer();
 void reset();
+void Time1(int value);
 GLvoid drawScene();
 GLvoid Reshape(int w, int h);
 GLvoid Keyboard(unsigned char key, int x, int y);
+void dir_check(int dir_check[]);
 char* filetobuf(const char* file);
 
 GLuint shaderProgramID; //--- 세이더 프로그램 이름
@@ -22,12 +24,16 @@ GLuint vertexShader; //--- 버텍스 세이더 객체
 GLuint fragmentShader; //--- 프래그먼트 세이더 객체
 float r[4], g[4], b[4];
 float sx[4], sy[4];
+int dir_shape[4];
+int check1 = 0, check2 = 0, check3 = 0, check4 = 0;
 GLfloat Shape[4][9];    // 도형의 좌표
 GLfloat colors[4][9];  // 도형 꼭지점의 색상
 GLuint vao[4], vbo[8];
 
 void reset() {
+	check1 = 0;
 	for (int i = 0; i < 4; ++i) {
+		dir_shape[i] = 3;
 		r[i] = (rand() % 101) * 0.01, g[i] = (rand() % 101) * 0.01, b[i] = (rand() % 101) * 0.01;
 		for (int j = 0; j < 9; ++j) {
 			Shape[i][j] = 0;
@@ -66,11 +72,12 @@ void main(int argc, char** argv)
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(Keyboard);
+	glutTimerFunc(10, Time1, 1);
 	glutMainLoop();
 }
 
 GLvoid drawScene() {
-	glClearColor(1.0, 1.0, 1.0, 1.0f);
+	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glUseProgram(shaderProgramID);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -172,10 +179,106 @@ void make_fragmentShaders()
 	}
 }
 
+void dir_check(int dir_shape, int i) {
+	if (dir_shape == 0) {     // 오른쪽 방향
+		Shape[i][0] = sx[i] + 0.2;
+		Shape[i][1] = sy[i];
+		Shape[i][3] = sx[i] - 0.1;
+		Shape[i][4] = sy[i] + 0.1;
+		Shape[i][6] = sx[i] - 0.1;
+		Shape[i][7] = sy[i] - 0.1;
+	}
+	else if (dir_shape == 1) {   //  왼쪽 방향
+		Shape[i][0] = sx[i] - 0.2;
+		Shape[i][1] = sy[i];
+		Shape[i][3] = sx[i] + 0.1;
+		Shape[i][4] = sy[i] + 0.1;
+		Shape[i][6] = sx[i] + 0.1;
+		Shape[i][7] = sy[i] - 0.1;
+	}
+	else if (dir_shape == 2) {   //  아래 방향
+		Shape[i][0] = sx[i];
+		Shape[i][1] = sy[i] - 0.2;
+		Shape[i][3] = sx[i] - 0.1;
+		Shape[i][4] = sy[i] + 0.1;
+		Shape[i][6] = sx[i] + 0.1;
+		Shape[i][7] = sy[i] + 0.1;
+	}
+	else if (dir_shape == 3) {   //  위 방향
+		Shape[i][0] = sx[i];
+		Shape[i][1] = sy[i] + 0.2;
+		Shape[i][3] = sx[i] - 0.1;
+		Shape[i][4] = sy[i] - 0.1;
+		Shape[i][6] = sx[i] + 0.1;
+		Shape[i][7] = sy[i] - 0.1;
+	}
+}
+int dir[4];
+void Time1(int value) {
+	if (check1 == 1) {
+		for (int i = 0; i < 4; ++i) {
+			if (dir[i] == 0) {  // 오른쪽 위로 이동
+				sx[i] = sx[i] + 0.01;
+				sy[i] = sy[i] + 0.01;
+				if (sx[i] + 0.1 >= 1.0) {
+					dir[i] = 1;
+					dir_shape[i] = 1;
+				}
+				if (sy[i] + 0.1 >= 1.0) {
+					dir[i] = 3;
+					dir_shape[i] = 2;
+				}
+			}
+			else if (dir[i] == 1) {  // 왼쪽 위로 이동
+				sx[i] = sx[i] - 0.01;
+				sy[i] = sy[i] + 0.01;
+				if (sx[i] - 0.1 <= -1.0) {
+					dir[i] = 0;
+					dir_shape[i] = 0;
+				}
+				if (sy[i] + 0.1 >= 1.0) {
+					dir[i] = 2;
+					dir_shape[i] = 2;
+				}
+			}
+			else if (dir[i] == 2) {  // 왼쪽 아래로 이동
+				sx[i] = sx[i] - 0.01;
+				sy[i] = sy[i] - 0.01;
+				if (sx[i] - 0.1 <= -1.0) {
+					dir[i] = 3;
+					dir_shape[i] = 0;
+				}
+				if (sy[i] - 0.1 <= -1.0) {
+					dir[i] = 1;
+					dir_shape[i] = 3;
+				}
+			}
+			else if (dir[i] == 3) {  // 오른쪽 아래로 이동
+				sx[i] = sx[i] + 0.01;
+				sy[i] = sy[i] - 0.01;
+				if (sx[i] + 0.1 >= 1.0) {
+					dir[i] = 2;
+					dir_shape[i] = 1;
+				}
+				if (sy[i] - 0.1 <= -1.0) {
+					dir[i] = 0;
+					dir_shape[i] = 3;
+				}
+			}
+			dir_check(dir_shape[i], i);
+		}
+		InitBuffer();
+		drawScene();
+	}		
+	glutTimerFunc(10, Time1, 1);
+}
+
 GLvoid Keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case '1':    //  튕기기
-		printf("1");
+		check1 = 1 - check1;
+		for (int i = 0; i < 4; ++i)
+			dir[i] = rand() % 4;
 		break;
 	case '2':    //  좌우로 지그재그
 		printf("2");
