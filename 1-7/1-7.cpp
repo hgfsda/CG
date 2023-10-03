@@ -24,7 +24,7 @@ int cnt, save_draw_check[10];   // 현재 그려진 도형 개수, 정해진 도형 저장
 float r[10], g[10], b[10];
 GLfloat Shape[10][18];    // 도형의 좌표
 GLfloat colors[10][18];  // 도형 꼭지점의 색상
-GLuint vao, vbo[10];
+GLuint vao[10], vbo[20];
 
 void reset() {
 	cnt = 0;
@@ -67,9 +67,31 @@ GLvoid drawScene() {
 	glUseProgram(shaderProgramID);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glUseProgram(shaderProgramID);
-	glBindVertexArray(vao);
-	//--- 삼각형 그리기
-	glDrawArrays(GL_TRIANGLES, 0, 3);
+	int PosLocation = glGetAttribLocation(shaderProgramID, "in_Position"); //	: 0  Shader의 'layout (location = 0)' 부분
+	int ColorLocation = glGetAttribLocation(shaderProgramID, "in_Color");
+
+
+	for (int i = 0; i < cnt; ++i) {
+		glBindVertexArray(vao[i]);
+		if (save_draw_check[i] == 1) {
+			glPointSize(10);
+			glDrawArrays(GL_POINTS, Shape[i][0], 1);
+		}
+		else if (save_draw_check[i] == 2) {
+			glLineWidth(10);
+			glDrawArrays(GL_LINES, Shape[i][0], 2);
+		}
+		else if (save_draw_check[i] == 3) {
+			glDrawArrays(GL_TRIANGLES, Shape[i][0], 3);
+		}
+		else if (save_draw_check[i] == 4) {
+			glDrawArrays(GL_TRIANGLES, Shape[i][0], 6);
+		}
+	}
+
+	glEnableVertexAttribArray(PosLocation);
+	glEnableVertexAttribArray(ColorLocation);
+
 	glutSwapBuffers();
 }
 
@@ -79,17 +101,21 @@ GLvoid Reshape(int w, int h) {
 
 void InitBuffer()
 {
-	glGenVertexArrays(1, &vao); //--- VAO 를 지정하고 할당하기
-	glBindVertexArray(vao); //--- VAO를 바인드하기
-	glGenBuffers(2, vbo); //--- 2개의 VBO를 지정하고 할당하기
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(GLfloat), Shape, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-	glBufferData(GL_ARRAY_BUFFER, 9 * sizeof(GLfloat), colors, GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(1);
+	glGenVertexArrays(cnt, vao);
+	glGenBuffers(cnt * 2, vbo);
+
+	for (int i = 0; i < cnt; ++i) {
+		glBindVertexArray(vao[i]);
+		glBindBuffer(GL_ARRAY_BUFFER, vbo[i * 2]);
+		glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), Shape[i], GL_STATIC_DRAW);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, vbo[i * 2 + 1]);
+		glBufferData(GL_ARRAY_BUFFER, 18 * sizeof(GLfloat), colors[i], GL_STATIC_DRAW);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(1);
+	}
 }
 
 void make_shaderProgram()
@@ -176,6 +202,7 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 		break;
 	case 'c':   // 모든 도형 삭제
 		reset();
+		drawScene();
 		break;
 	case 'q':   // 프로그램 종료
 		std::cout << "프로그램을 종료합니다." << std::endl;
@@ -224,6 +251,7 @@ void Mouse(int button, int state, int x, int y) {
 			}
 			cnt++;
 			save_draw_check[cnt] = save_draw_check[cnt - 1];
+			InitBuffer();
 		}
 	}
 }
