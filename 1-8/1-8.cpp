@@ -236,20 +236,43 @@ void Mouse(int button, int state, int x, int y) {
 
 	normalized_x = (2.0 * x / 800) - 1.0;
 	normalized_y = 1.0 - (2.0 * y / 600);
+
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 		if (normalized_x >= 0 && normalized_y >= 0) {  // 1사분면일때
-			printf("1");
+			Shape[2][0] = normalized_x;
+			Shape[2][1] = normalized_y + 0.2;
+			Shape[2][3] = normalized_x - 0.1;
+			Shape[2][4] = normalized_y - 0.1;
+			Shape[2][6] = normalized_x + 0.1;
+			Shape[2][7] = normalized_y - 0.1;
 		}
 		else if (normalized_x < 0 && normalized_y >= 0) {   // 2사분면일때
-			printf("2");
+			Shape[3][0] = normalized_x;
+			Shape[3][1] = normalized_y + 0.2;
+			Shape[3][3] = normalized_x - 0.1;
+			Shape[3][4] = normalized_y - 0.1;
+			Shape[3][6] = normalized_x + 0.1;
+			Shape[3][7] = normalized_y - 0.1;
 		}
 		else if (normalized_x < 0 && normalized_y < 0) {   // 3사분면일때
-			printf("3");
+			Shape[4][0] = normalized_x;
+			Shape[4][1] = normalized_y + 0.2;
+			Shape[4][3] = normalized_x - 0.1;
+			Shape[4][4] = normalized_y - 0.1;
+			Shape[4][6] = normalized_x + 0.1;
+			Shape[4][7] = normalized_y - 0.1;
 		}
 		else if (normalized_x >= 0 && normalized_y < 0) {   // 4사분면일때
-			printf("4");
+			Shape[5][0] = normalized_x;
+			Shape[5][1] = normalized_y + 0.2;
+			Shape[5][3] = normalized_x - 0.1;
+			Shape[5][4] = normalized_y - 0.1;
+			Shape[5][6] = normalized_x + 0.1;
+			Shape[5][7] = normalized_y - 0.1;
 		}
 	}
+	InitBuffer();
+	drawScene();
 }
 
 char* filetobuf(const char* file)
