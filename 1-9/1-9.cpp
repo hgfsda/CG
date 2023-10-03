@@ -19,7 +19,7 @@ void Time4(int value);
 GLvoid drawScene();
 GLvoid Reshape(int w, int h);
 GLvoid Keyboard(unsigned char key, int x, int y);
-void dir_check(int dir_check[]);
+void dir_check(int dir_check, int i);
 char* filetobuf(const char* file);
 
 GLuint shaderProgramID; //--- 세이더 프로그램 이름
@@ -30,6 +30,7 @@ float sx[4], sy[4];
 int dir_shape[4];
 int check1 = 0, check2 = 0, check3 = 0, check4 = 0;
 int save_location_cnt[4];   // 지그재그 이동에서 위 아래로 움직이는 함수
+float max[4]; //  3번에서 얼마나 작아졌는지 
 GLfloat Shape[4][9];    // 도형의 좌표
 GLfloat colors[4][9];  // 도형 꼭지점의 색상
 GLuint vao[4], vbo[8];
@@ -361,6 +362,46 @@ void Time2(int value) {
 }
 
 void Time3(int value) {
+	if (check3 == 1) {
+		for (int i = 0; i < 4; ++i) {
+			if (dir[i] == 0) {  // 아래로 이동
+				dir_shape[i] = 0;
+				if (sy[i] - 0.1 > -1.0 + max[i])
+					sy[i] -= 0.01;
+				else
+					dir[i] = 3;
+			}
+			else if (dir[i] == 1) {  // 위로 이동
+				dir_shape[i] = 1;
+				if (sy[i] + 0.1 < 1.0 - max[i])
+					sy[i] += 0.01;
+				else {
+					dir[i] = 2;
+					max[i] += 0.2;
+					if (max[i] >= 0.8)
+						max[i] = 0;
+				}
+			}
+			else if (dir[i] == 2) {  // 왼쪽으로 이동
+				dir_shape[i] = 2;
+				if (sx[i] - 0.1 > -1.0 + max[i])
+					sx[i] -= 0.01;
+				else
+					dir[i] = 0;
+			}
+			else if (dir[i] == 3) {  // 오른쪽으로 이동
+				dir_shape[i] = 3;
+				if (sx[i] + 0.1 < 1.0 - max[i])
+					sx[i] += 0.01;
+				else
+					dir[i] = 1;
+			}
+			dir_check(dir_shape[i], i);
+		}
+		InitBuffer();
+		drawScene();
+	}
+	glutTimerFunc(10, Time3, 1);
 }
 
 void Time4(int value) {
@@ -390,6 +431,10 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 		break;
 	case '3':    //  사각 스파이럴
 		if (check3 == 0) {
+			for (int i = 0; i < 4; ++i) {
+				dir[i] = 2;
+				max[i] = 0;
+			}
 			check3 = 1;
 			check1 = check2 = check4 = 0;
 		}
