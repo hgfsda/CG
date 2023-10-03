@@ -24,16 +24,23 @@ GLuint vertexShader; //--- 버텍스 세이더 객체
 GLuint fragmentShader; //--- 프래그먼트 세이더 객체
 float r, g, b;
 float sx[5], sy[5];
-GLfloat Shape[5][300];    // 도형의 좌표
-GLfloat colors[5][300];  // 도형 꼭지점의 색상
+int check_num = 1;        // 몇개의 스파이럴을 그릴지
+int check_point_line = 0;   // 점인지 선인지 구분
+int check_move;    // 현재 점이 움직이는지     0.안그려지는중 / 1. 커지는중 / 2. 작아지는중
+int angle, cnt;
+float save_x[5], save_y[5];
+GLfloat Shape[5][702];    // 도형의 좌표
+GLfloat colors[5][702];  // 도형 꼭지점의 색상
 GLuint vao[5], vbo[10];
 
 void reset() {
 	r = (rand() % 101) * 0.01;
 	g = (rand() % 101) * 0.01;
 	b = (rand() % 101) * 0.01;
+	angle = cnt = 0;
+	check_move = 0;   // 현재 안그려지는 중
 	for (int i = 0; i < 5; ++i) {
-		for (int j = 0; j < 300; ++j) {
+		for (int j = 0; j < 702; ++j) {
 			Shape[i][j] = 0;
 			colors[i][j] = 1.0;
 		}
@@ -71,9 +78,16 @@ GLvoid drawScene() {
 	int PosLocation = glGetAttribLocation(shaderProgramID, "in_Position"); //	: 0  Shader의 'layout (location = 0)' 부분
 	int ColorLocation = glGetAttribLocation(shaderProgramID, "in_Color");
 
-	for (int i = 0; i < 4; ++i) {
+	for (int i = 0; i < check_num; ++i) {
 		glBindVertexArray(vao[i]);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		if (check_point_line == 0) {
+			glPointSize(3);
+			glDrawArrays(GL_POINTS, 0, 234);
+		}
+		else {
+			glLineWidth(3);
+			glDrawArrays(GL_LINE_STRIP, 0, 234);
+		}
 	}
 
 	glEnableVertexAttribArray(PosLocation);
@@ -94,12 +108,12 @@ void InitBuffer()
 	for (int i = 0; i < 5; ++i) {
 		glBindVertexArray(vao[i]);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo[i * 2]);
-		glBufferData(GL_ARRAY_BUFFER, 300 * sizeof(GLfloat), Shape[i], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, 702 * sizeof(GLfloat), Shape[i], GL_STATIC_DRAW);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		glEnableVertexAttribArray(0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vbo[i * 2 + 1]);
-		glBufferData(GL_ARRAY_BUFFER, 300 * sizeof(GLfloat), colors[i], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, 702 * sizeof(GLfloat), colors[i], GL_STATIC_DRAW);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		glEnableVertexAttribArray(1);
 	}
@@ -165,26 +179,54 @@ void make_fragmentShaders()
 	}
 }
 
-
 void Time1(int value) {
+	float radian = angle * 3.14 / 180.0;
+	if (check_move == 1) {
+		for (int i = 0; i < check_num; ++i) {
+			sx[i] += radian * cos(radian) * 0.002;
+			sy[i] += radian * sin(radian) * 0.002;
+
+			Shape[i][cnt] = sx[i];
+			Shape[i][cnt+1] = sy[i];
+		}
+		if (angle < 1170) {
+			cnt += 3;
+			angle += 10;
+		}
+		else {
+			check_move = 2;  // 0.2222 정도 차이 그럼 0.4444 만큼 이동
+		}
+		InitBuffer();
+		drawScene();
+	}
+	else if (check_move == 2) {
+
+	}
 	glutTimerFunc(10, Time1, 1);
 }
 
 GLvoid Keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case '1':   // 입력한 숫자만큼 스파이럴이 그려진다.
+		check_num = 1;
 		break;
 	case '2':
+		check_num = 2;
 		break;
 	case '3':
+		check_num = 3;
 		break;
 	case '4':
+		check_num = 4;
 		break;
 	case '5':
+		check_num = 5;
 		break;
 	case 'p':    // 점으로 그린다.
+		check_point_line = 0;
 		break;
 	case 'l':    // 선으로 그린다.
+		check_point_line = 1;
 		break;
 	case 'r':   // 리셋
 		reset();
@@ -203,9 +245,18 @@ void Mouse(int button, int state, int x, int y) {
 
 	normalized_x = (2.0 * x / 800) - 1.0;
 	normalized_y = 1.0 - (2.0 * y / 600);
-	r = (rand() % 101) * 0.01;
-	g = (rand() % 101) * 0.01;
-	b = (rand() % 101) * 0.01;
+	reset();
+	check_move = 1;
+	sx[0] = normalized_x;
+	sy[0] = normalized_y;
+	for (int i = 1; i < 5; ++i) {
+		sx[i] = (rand() % 201 - 100) * 0.01;
+		sy[i] = (rand() % 201 - 100) * 0.01;
+	}
+	for (int i = 0; i < 5; ++i) {
+		save_x[i] = sx[i];
+		save_y[i] = sy[i];
+	}
 }
 
 char* filetobuf(const char* file)
