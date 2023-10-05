@@ -27,7 +27,7 @@ float sx[5], sy[5];
 int check_num = 1;        // 몇개의 스파이럴을 그릴지
 int check_point_line = 0;   // 점인지 선인지 구분
 int check_move;    // 현재 점이 움직이는지     0.안그려지는중 / 1. 커지는중 / 2. 작아지는중
-int angle, cnt;
+int angle, cnt, point_cnt;
 float save_x[5], save_y[5];
 GLfloat Shape[5][702];    // 도형의 좌표
 GLfloat colors[5][702];  // 도형 꼭지점의 색상
@@ -37,7 +37,7 @@ void reset() {
 	r = (rand() % 101) * 0.01;
 	g = (rand() % 101) * 0.01;
 	b = (rand() % 101) * 0.01;
-	angle = cnt = 0;
+	angle = cnt = point_cnt = 0;
 	check_move = 0;   // 현재 안그려지는 중
 	for (int i = 0; i < 5; ++i) {
 		for (int j = 0; j < 702; ++j) {
@@ -82,11 +82,11 @@ GLvoid drawScene() {
 		glBindVertexArray(vao[i]);
 		if (check_point_line == 0) {
 			glPointSize(3);
-			glDrawArrays(GL_POINTS, 0, 234);
+			glDrawArrays(GL_POINTS, 0, point_cnt);
 		}
 		else {
 			glLineWidth(3);
-			glDrawArrays(GL_LINE_STRIP, 0, 234);
+			glDrawArrays(GL_LINE_STRIP, 0, point_cnt);
 		}
 	}
 
@@ -192,15 +192,33 @@ void Time1(int value) {
 		if (angle < 1170) {
 			cnt += 3;
 			angle += 10;
+			++point_cnt;
 		}
 		else {
 			check_move = 2;  // 0.2222 정도 차이 그럼 0.4444 만큼 이동
+			for (int i = 0; i < 5; ++i) {
+				sx[i] = save_x[i] + 0.2222;
+				sy[i] = save_y[i] - 0.01;
+			}
 		}
 		InitBuffer();
 		drawScene();
 	}
 	else if (check_move == 2) {
+		for (int i = 0; i < check_num; ++i) {
+			sx[i] += radian * cos(radian) * 0.002;
+			sy[i] += radian * sin(radian) * 0.002;
 
+			Shape[i][cnt] = sx[i];
+			Shape[i][cnt + 1] = sy[i];
+		}
+		if (angle > 0) {
+			cnt += 3;
+			angle -= 10;
+			++point_cnt;
+		}
+		InitBuffer();
+		drawScene();
 	}
 	glutTimerFunc(10, Time1, 1);
 }
@@ -224,9 +242,13 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 		break;
 	case 'p':    // 점으로 그린다.
 		check_point_line = 0;
+		InitBuffer();
+		drawScene();
 		break;
 	case 'l':    // 선으로 그린다.
 		check_point_line = 1;
+		InitBuffer();
+		drawScene();
 		break;
 	case 'r':   // 리셋
 		reset();
