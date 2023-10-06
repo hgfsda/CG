@@ -12,11 +12,7 @@ void make_fragmentShaders();
 void make_shaderProgram();
 void InitBuffer();
 void reset();
-void Time_l(int value);
-void Time_t(int value);
-void Time_r(int value);
-void Time_p(int value);
-void Time_d(int value);
+void Time(int value);
 void setting_point(int check_shape, int i);
 GLvoid drawScene();
 GLvoid Reshape(int w, int h);
@@ -102,11 +98,7 @@ void main(int argc, char** argv)
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(Keyboard);
-	glutTimerFunc(10, Time_l, 1);
-	glutTimerFunc(10, Time_t, 1);
-	glutTimerFunc(10, Time_r, 1);
-	glutTimerFunc(10, Time_p, 1);
-	glutTimerFunc(10, Time_d, 1);
+	glutTimerFunc(10, Time, 1);
 	glutMainLoop();
 }
 
@@ -237,7 +229,7 @@ void make_fragmentShaders()
 	}
 }
 
-void Time_l(int value) {
+void Time(int value) {
 	if (check_l == true) {
 		for (int i = 0; i < 4; ++i) {
 			if (check_shape[i] == 3 && save_check_shape[i] == 2) {
@@ -261,10 +253,7 @@ void Time_l(int value) {
 		if (save_check_shape[0] != 2 && save_check_shape[1] != 2 && save_check_shape[2] != 2 && save_check_shape[3] != 2)
 			check_l = check_all = false;
 	}
-	glutTimerFunc(10, Time_l, 1);
-}
 
-void Time_t(int value) {
 	if (check_t == true) {
 		for (int i = 0; i < 4; ++i) {
 			if (check_shape[i] == 4 && save_check_shape[i] == 3) {
@@ -284,10 +273,7 @@ void Time_t(int value) {
 		if (save_check_shape[0] != 3 && save_check_shape[1] != 3 && save_check_shape[2] != 3 && save_check_shape[3] != 3)
 			check_t = check_all = false;
 	}
-	glutTimerFunc(10, Time_t, 1);
-}
 
-void Time_r(int value) {
 	if (check_r == true) {
 		for (int i = 0; i < 4; ++i) {
 			if (check_shape[i] == 5 && save_check_shape[i] == 4) {
@@ -313,10 +299,7 @@ void Time_r(int value) {
 		if (save_check_shape[0] != 4 && save_check_shape[1] != 4 && save_check_shape[2] != 4 && save_check_shape[3] != 4)
 			check_r = check_all = false;
 	}
-	glutTimerFunc(10, Time_r, 1);
-}
 
-void Time_p(int value) {
 	if (check_p == true) {
 		for (int i = 0; i < 4; ++i) {
 			if (check_shape[i] == 5 && save_check_shape[i] == 1) {
@@ -355,10 +338,7 @@ void Time_p(int value) {
 		if (check_shape[0] != 5 && check_shape[1] != 5 && check_shape[2] != 5 && check_shape[3] != 5)
 			check_p = check_all = false;
 	}
-	glutTimerFunc(10, Time_p, 1);
-}
 
-void Time_d(int value) {
 	if (check_d == true) {
 		for (int i = 0; i < 4; ++i) {
 			if (check_shape[i] == 2 && save_check_shape[i] == 1) {
@@ -380,7 +360,7 @@ void Time_d(int value) {
 		if (save_check_shape[0] != 1 && save_check_shape[1] != 1 && save_check_shape[2] != 1 && save_check_shape[3] != 1)
 			check_d = check_all = false;
 	}
-	glutTimerFunc(10, Time_d, 1);
+	glutTimerFunc(10, Time, 1);
 }
 
 void setting_point(int check_shape, int i) {
