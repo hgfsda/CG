@@ -25,7 +25,7 @@ char* filetobuf(const char* file);
 GLuint shaderProgramID; //--- 세이더 프로그램 이름
 GLuint vertexShader; //--- 버텍스 세이더 객체
 GLuint fragmentShader; //--- 프래그먼트 세이더 객체
-float r[18], g[18], b[18];
+float r[5], g[5], b[5];
 int check_shape[4], save_check_shape[4];   // 현재 도형이 무슨 도형인지 확인 1. 점 / 2. 선 / 3, 삼각형 / 4. 사각형 / 5. 오각형
 float move_point[4][2];   // 이동하는 점의 거리
 BOOL check_all, check_l, check_t, check_r, check_p, check_d;
@@ -52,6 +52,11 @@ void reset() {
 			else if (j % 3 == 2) colors[i][j] = b[i];
 		}
 	}
+
+	for (int i = 0; i < 4; ++i)
+		for (int j = 0; j < 2; ++j)
+			move_point[i][j] = 0;             // 이동 거리 초기화
+
 	save_check_shape[0] = check_shape[0] = 3;  // 1사분면 삼각형
 	Shape[0][0] = 0.5;
 	Shape[0][1] = Shape[0][6] = 0.7;
@@ -96,7 +101,7 @@ void main(int argc, char** argv)
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(Keyboard);
-	//glutTimerFunc(10, Time_l, 1);
+	glutTimerFunc(10, Time_l, 1);
 	//glutTimerFunc(10, Time_t, 1);
 	//glutTimerFunc(10, Time_r, 1);
 	//glutTimerFunc(10, Time_p, 1);
@@ -235,9 +240,27 @@ void Time_l(int value) {
 	if (check_l == true) {
 		for (int i = 0; i < 4; ++i) {
 			if (check_shape[i] == 3 && save_check_shape[i] == 2) {
+				if (move_point[i][0] < 0.2) {
+					move_point[i][0] += 0.01;
+					Shape[i][0] = Shape[i][0] - 0.01;
+				}
 
+				if (move_point[i][1] < 0.39) {
+					move_point[i][1] += 0.01;
+					Shape[i][7] = Shape[i][7] - 0.01;
+				}
+				else {
+					save_check_shape[i] = 3;
+					move_point[i][0] = move_point[i][1] = 0;
+				}
 			}
 		}
+		InitBuffer();
+		drawScene();
+		if (save_check_shape[0] != 2 && save_check_shape[1] != 2 && save_check_shape[2] != 2 && save_check_shape[3] != 2)
+			check_l = false;
+		if (check_l == false && check_t == false && check_r == false && check_p == false && check_d == false)
+			check_all = false;
 	}
 	glutTimerFunc(10, Time_l, 1);
 }
@@ -310,11 +333,11 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 		if (check_all == false) {
 			check_all = true;
 			check_l = true;
-			printf("l\n");
 			for (int i = 0; i < 4; ++i) {
-				if (check_shape[i] == 2)
+				if (check_shape[i] == 2) {
 					setting_point(check_shape[i], i);
 					check_shape[i] = 3;
+				}
 			}
 		}
 		break;
@@ -322,11 +345,11 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 		if (check_all == false) {
 			check_all = true;
 			check_t = true;
-			printf("t\n");
 			for (int i = 0; i < 4; ++i) {
-				if (check_shape[i] == 3)
+				if (check_shape[i] == 3) {
 					setting_point(check_shape[i], i);
 					check_shape[i] = 4;
+				}
 			}
 		}
 		break;
@@ -334,11 +357,11 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 		if (check_all == false) {
 			check_all = true;
 			check_r = true;
-			printf("r\n");
 			for (int i = 0; i < 4; ++i) {
-				if (check_shape[i] == 4)
+				if (check_shape[i] == 4) {
 					setting_point(check_shape[i], i);
 					check_shape[i] = 5;
+				}
 			}
 		}
 		break;
@@ -346,7 +369,6 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 		if (check_all == false) {
 			check_all = true;
 			check_p = true;
-			printf("p\n");
 			for (int i = 0; i < 4; ++i) {
 				if (check_shape[i] == 5)
 					save_check_shape[i] = 1;
@@ -357,22 +379,23 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 		if (check_all == false) {
 			check_all = true;
 			check_d = true;
-			printf("d\n");
 			for (int i = 0; i < 4; ++i) {
-				if (check_shape[i] == 1)
+				if (check_shape[i] == 1) {
 					setting_point(check_shape[i], i);
 					check_shape[i] = 2;
+				}
 			}
 		}
 		break;
 	case 'a':   // 모든 도형 변경
 		if (check_all == false) {
 			check_all = true;
-			printf("a\n");
 			check_l = check_t = check_r = check_p = check_d = true;
 			for (int i = 0; i < 4; ++i) {
-				if (check_shape[i] != 5)
+				if (check_shape[i] != 5) {
+					setting_point(check_shape[i], i);
 					check_shape[i] += 1;
+				}
 				else
 					save_check_shape[i] = 1;
 			}
