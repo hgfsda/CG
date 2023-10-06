@@ -25,11 +25,15 @@ GLuint shaderProgramID; //--- 세이더 프로그램 이름
 GLuint vertexShader; //--- 버텍스 세이더 객체
 GLuint fragmentShader; //--- 프래그먼트 세이더 객체
 float r[6], g[6], b[6];
-GLfloat Shape[6][15];    // 도형의 좌표
-GLfloat colors[6][15];  // 도형 꼭지점의 색상
-GLuint vao[6], vbo[12];
+int check_shape[4];   // 현재 도형이 무슨 도형인지 확인 1. 점 / 2. 선 / 3, 삼각형 / 4. 사각형 / 5. 오각형
+BOOL check_all, check_l, check_t, check_r, check_p;
+// 0 1 직선 / 2 ~ 5 1사분면 / 6 ~ 9 2사분면 / 10 ~ 13 3사분면 / 14 ~17 4사분면
+GLfloat Shape[18][9];    // 도형의 좌표
+GLfloat colors[18][9];  // 도형 꼭지점의 색상
+GLuint vao[18], vbo[36];
 
 void reset() {
+	check_all = check_l = check_t = check_r = check_p = false;
 	for (int i = 0; i < 2; ++i) {
 		for (int j = 0; j < 9; ++j) {
 			Shape[i][j] = 0;
@@ -85,7 +89,7 @@ GLvoid drawScene() {
 
 	for (int i = 0; i < 6; ++i) {
 		glBindVertexArray(vao[i]);
-		if (i <= 1) {
+		if (i < 2) {
 			glPointSize(3);
 			glDrawArrays(GL_LINE_STRIP, 0, 2);
 		}
@@ -202,15 +206,15 @@ void Time_p(int value) {
 
 GLvoid Keyboard(unsigned char key, int x, int y) {
 	switch (key) {
-	case 'l':
+	case 'l':   // 선에서 삼각형으로
 		break;
-	case 't':
+	case 't':   // 삼각형에서 사각형으로
 		break;
-	case 'r':
+	case 'r':   // 사각형에서 오각형으로 
 		break;
-	case 'p':
+	case 'p':   // 오각형에서 점으로
 		break;
-	case 'a':   // 리셋
+	case 'a':   // 모든 도형 변경
 		reset();
 		InitBuffer();
 		drawScene();
