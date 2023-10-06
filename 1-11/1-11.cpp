@@ -16,6 +16,7 @@ void Time_l(int value);
 void Time_t(int value);
 void Time_r(int value);
 void Time_p(int value);
+void setting_point(int check_shape, int i);
 GLvoid drawScene();
 GLvoid Reshape(int w, int h);
 GLvoid Keyboard(unsigned char key, int x, int y);
@@ -26,6 +27,7 @@ GLuint vertexShader; //--- 버텍스 세이더 객체
 GLuint fragmentShader; //--- 프래그먼트 세이더 객체
 float r[18], g[18], b[18];
 int check_shape[4], save_check_shape[4];   // 현재 도형이 무슨 도형인지 확인 1. 점 / 2. 선 / 3, 삼각형 / 4. 사각형 / 5. 오각형
+float move_point[4][2];   // 이동하는 점의 거리
 BOOL check_all, check_l, check_t, check_r, check_p, check_d;
 // 0 1 직선 / 2 ~ 5 1사분면 / 6 ~ 9 2사분면 / 10 ~ 13 3사분면 / 14 ~17 4사분면
 GLfloat Shape[5][36];    // 도형의 좌표
@@ -51,15 +53,15 @@ void reset() {
 		}
 	}
 	save_check_shape[0] = check_shape[0] = 3;  // 1사분면 삼각형
-	Shape[0][0] = Shape[0][1] = Shape[0][7] = 0.3;
-	Shape[0][3] = 0.5;
-	Shape[0][4] = Shape[0][6] = 0.7;
+	Shape[0][0] = 0.5;
+	Shape[0][1] = Shape[0][6] = 0.7;
+	Shape[0][3] = Shape[0][4] = Shape[0][7] = 0.3;
 
 	save_check_shape[1] = check_shape[1] = 2;  // 2사분면 선
-	Shape[1][0] = -0.7;
-	Shape[1][1] = 0.3;
-	Shape[1][3] = -0.3;
-	Shape[1][4] = 0.7;
+	Shape[1][0] = -0.3;
+	Shape[1][1] = 0.7;
+	Shape[1][3] = -0.7;
+	Shape[1][4] = 0.3;
 
 	save_check_shape[2] = check_shape[2] = 4;  // 3사분면 사각형
 	Shape[2][0] = Shape[2][12] = Shape[2][21] = -0.5;
@@ -230,28 +232,76 @@ void make_fragmentShaders()
 }
 
 void Time_l(int value) {
+	if (check_l == true) {
+		for (int i = 0; i < 4; ++i) {
+			if (check_shape[i] == 3 && save_check_shape[i] == 2) {
 
+			}
+		}
+	}
 	glutTimerFunc(10, Time_l, 1);
 }
 
 void Time_t(int value) {
+	if (check_t == true) {
 
+	}
 	glutTimerFunc(10, Time_t, 1);
 }
 
 void Time_r(int value) {
+	if (check_r == true) {
 
+	}
 	glutTimerFunc(10, Time_r, 1);
 }
 
 void Time_p(int value) {
+	if (check_p == true) {
 
+	}
 	glutTimerFunc(10, Time_p, 1);
 }
 
 void Time_d(int value) {
+	if (check_d == true) {
 
+	}
 	glutTimerFunc(10, Time_d, 1);
+}
+
+void setting_point(int check_shape, int i) {
+	if(check_shape == 1) {
+		Shape[i][3] = Shape[i][0];
+		Shape[i][4] = Shape[i][1];
+	}
+	else if (check_shape == 2) {
+		Shape[i][6] = Shape[i][0];
+		Shape[i][7] = Shape[i][1];
+	}
+	else if (check_shape == 3) {
+		Shape[i][9] = Shape[i][0];
+		Shape[i][10] = Shape[i][1];
+		Shape[i][12] = Shape[i][0];
+		Shape[i][13] = Shape[i][1];
+		Shape[i][15] = Shape[i][3];
+		Shape[i][16] = Shape[i][4];
+
+		Shape[i][18] = Shape[i][0];
+		Shape[i][19] = Shape[i][1];
+		Shape[i][21] = Shape[i][0];
+		Shape[i][22] = Shape[i][1];
+		Shape[i][24] = Shape[i][6];
+		Shape[i][25] = Shape[i][7];
+	}
+	else if (check_shape == 4) {
+		Shape[i][27] = Shape[i][9];
+		Shape[i][28] = Shape[i][10];
+		Shape[i][30] = Shape[i][18];
+		Shape[i][31] = Shape[i][19];
+		Shape[i][33] = Shape[i][0];
+		Shape[i][34] = Shape[i][1];
+	}
 }
 
 GLvoid Keyboard(unsigned char key, int x, int y) {
@@ -263,6 +313,7 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 			printf("l\n");
 			for (int i = 0; i < 4; ++i) {
 				if (check_shape[i] == 2)
+					setting_point(check_shape[i], i);
 					check_shape[i] = 3;
 			}
 		}
@@ -274,6 +325,7 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 			printf("t\n");
 			for (int i = 0; i < 4; ++i) {
 				if (check_shape[i] == 3)
+					setting_point(check_shape[i], i);
 					check_shape[i] = 4;
 			}
 		}
@@ -285,6 +337,7 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 			printf("r\n");
 			for (int i = 0; i < 4; ++i) {
 				if (check_shape[i] == 4)
+					setting_point(check_shape[i], i);
 					check_shape[i] = 5;
 			}
 		}
@@ -307,6 +360,7 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 			printf("d\n");
 			for (int i = 0; i < 4; ++i) {
 				if (check_shape[i] == 1)
+					setting_point(check_shape[i], i);
 					check_shape[i] = 2;
 			}
 		}
