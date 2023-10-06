@@ -126,7 +126,7 @@ GLvoid drawScene() {
 	for (int i = 0; i < 4; ++i) {
 		if(check_shape[i] == 1) {
 			glBindVertexArray(vao[i]);
-			glPointSize(3);
+			glPointSize(5);
 			glDrawArrays(GL_POINTS, 0, 1);
 		}
 		else if (check_shape[i] == 2) {
@@ -259,9 +259,7 @@ void Time_l(int value) {
 		InitBuffer();
 		drawScene();
 		if (save_check_shape[0] != 2 && save_check_shape[1] != 2 && save_check_shape[2] != 2 && save_check_shape[3] != 2)
-			check_l = false;
-		if (check_l == false && check_t == false && check_r == false && check_p == false && check_d == false)
-			check_all = false;
+			check_l = check_all = false;
 	}
 	glutTimerFunc(10, Time_l, 1);
 }
@@ -284,9 +282,7 @@ void Time_t(int value) {
 		InitBuffer();
 		drawScene();
 		if (save_check_shape[0] != 3 && save_check_shape[1] != 3 && save_check_shape[2] != 3 && save_check_shape[3] != 3)
-			check_t = false;
-		if (check_l == false && check_t == false && check_r == false && check_p == false && check_d == false)
-			check_all = false;
+			check_t = check_all = false;
 	}
 	glutTimerFunc(10, Time_t, 1);
 }
@@ -315,23 +311,74 @@ void Time_r(int value) {
 		InitBuffer();
 		drawScene();
 		if (save_check_shape[0] != 4 && save_check_shape[1] != 4 && save_check_shape[2] != 4 && save_check_shape[3] != 4)
-			check_r = false;
-		if (check_l == false && check_t == false && check_r == false && check_p == false && check_d == false)
-			check_all = false;
+			check_r = check_all = false;
 	}
 	glutTimerFunc(10, Time_r, 1);
 }
 
 void Time_p(int value) {
 	if (check_p == true) {
+		for (int i = 0; i < 4; ++i) {
+			if (check_shape[i] == 5 && save_check_shape[i] == 1) {
+				if (move_point[i][0] < 0.09) {
+					move_point[i][0] += 0.01;
+					Shape[i][3] = Shape[i][15] += 0.01;
+					Shape[i][6] = Shape[i][24] -= 0.01;
+				}
 
+				if (move_point[i][1] < 0.19) {
+					move_point[i][1] += 0.01;
+					Shape[i][34] -= 0.01;
+					Shape[i][9] = Shape[i][27] += 0.01;
+					Shape[i][18] = Shape[i][30] -= 0.01;
+					Shape[i][4] = Shape[i][16] = Shape[i][7] = Shape[i][25] += 0.01;
+				}
+				else {
+					check_shape[i] = 1;
+					if (i == 0)
+						Shape[0][0] = Shape[0][1] = 0.5;
+					else if (i == 1)
+						Shape[1][0] = -0.5, Shape[1][1] = 0.5;
+					else if (i == 2)
+						Shape[2][0] = Shape[2][1] = -0.5;
+					else if (i == 3)
+						Shape[3][0] = 0.5, Shape[3][1] = -0.5;
+					for (int j = 3; j < 36; ++j) {
+						Shape[i][j] = 0;
+					}
+					move_point[i][0] = move_point[i][1] = 0;
+				}
+			}
+		}
+		InitBuffer();
+		drawScene();
+		if (check_shape[0] != 5 && check_shape[1] != 5 && check_shape[2] != 5 && check_shape[3] != 5)
+			check_p = check_all = false;
 	}
 	glutTimerFunc(10, Time_p, 1);
 }
 
 void Time_d(int value) {
 	if (check_d == true) {
-
+		for (int i = 0; i < 4; ++i) {
+			if (check_shape[i] == 2 && save_check_shape[i] == 1) {
+				if (move_point[i][0] < 0.2) {
+					move_point[i][0] += 0.01;
+					Shape[i][0] += 0.01;
+					Shape[i][1] += 0.01;
+					Shape[i][3] -= 0.01;
+					Shape[i][4] -= 0.01;
+				}
+				else {
+					save_check_shape[i] = 2;
+					move_point[i][0] = move_point[i][1] = 0;
+				}
+			}
+		}
+		InitBuffer();
+		drawScene();
+		if (save_check_shape[0] != 1 && save_check_shape[1] != 1 && save_check_shape[2] != 1 && save_check_shape[3] != 1)
+			check_d = check_all = false;
 	}
 	glutTimerFunc(10, Time_d, 1);
 }
