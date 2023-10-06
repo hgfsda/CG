@@ -25,15 +25,15 @@ GLuint shaderProgramID; //--- 세이더 프로그램 이름
 GLuint vertexShader; //--- 버텍스 세이더 객체
 GLuint fragmentShader; //--- 프래그먼트 세이더 객체
 float r[18], g[18], b[18];
-int check_shape[4];   // 현재 도형이 무슨 도형인지 확인 1. 점 / 2. 선 / 3, 삼각형 / 4. 사각형 / 5. 오각형
-BOOL check_all, check_l, check_t, check_r, check_p;
+int check_shape[4], save_check_shape[4];   // 현재 도형이 무슨 도형인지 확인 1. 점 / 2. 선 / 3, 삼각형 / 4. 사각형 / 5. 오각형
+BOOL check_all, check_l, check_t, check_r, check_p, check_d;
 // 0 1 직선 / 2 ~ 5 1사분면 / 6 ~ 9 2사분면 / 10 ~ 13 3사분면 / 14 ~17 4사분면
 GLfloat Shape[5][36];    // 도형의 좌표
 GLfloat colors[5][36];  // 도형 꼭지점의 색상
 GLuint vao[5], vbo[10];
 
 void reset() {
-	check_all = check_l = check_t = check_r = check_p = false;
+	check_all = check_l = check_t = check_r = check_p = check_d = false;
 	for (int j = 0; j < 36; ++j) {
 		Shape[4][j] = 0;
 		colors[4][j] = 0;
@@ -50,23 +50,23 @@ void reset() {
 			else if (j % 3 == 2) colors[i][j] = b[i];
 		}
 	}
-	check_shape[0] = 3;  // 1사분면 삼각형
+	save_check_shape[0] = check_shape[0] = 3;  // 1사분면 삼각형
 	Shape[0][0] = Shape[0][1] = Shape[0][7] = 0.3;
 	Shape[0][3] = 0.5;
 	Shape[0][4] = Shape[0][6] = 0.7;
 
-	check_shape[1] = 2;  // 2사분면 선
+	save_check_shape[1] = check_shape[1] = 2;  // 2사분면 선
 	Shape[1][0] = -0.7;
 	Shape[1][1] = 0.3;
 	Shape[1][3] = -0.3;
 	Shape[1][4] = 0.7;
 
-	check_shape[2] = 4;  // 3사분면 사각형
+	save_check_shape[2] = check_shape[2] = 4;  // 3사분면 사각형
 	Shape[2][0] = Shape[2][12] = Shape[2][21] = -0.5;
 	Shape[2][1] = Shape[2][6] = Shape[2][10] = Shape[2][13] = Shape[2][18] = Shape[2][19] = Shape[2][22] = Shape[2][24] = -0.3;
 	Shape[2][3] = Shape[2][4] = Shape[2][7] = Shape[2][9] = Shape[2][15] = Shape[2][16] = Shape[2][25] = -0.7;
 	
-	check_shape[3] = 5;  // 4사분면 오각형
+	save_check_shape[3] = check_shape[3] = 5;  // 4사분면 오각형
 	Shape[3][0] = Shape[3][12] = Shape[3][21] = Shape[3][33] = 0.5;
 	Shape[3][1] = Shape[3][10] = Shape[3][13] = Shape[3][19] = Shape[3][22] = Shape[3][28] = Shape[3][31] = -0.5;
 	Shape[3][3] = Shape[3][15] = 0.4;
@@ -98,6 +98,7 @@ void main(int argc, char** argv)
 	//glutTimerFunc(10, Time_t, 1);
 	//glutTimerFunc(10, Time_r, 1);
 	//glutTimerFunc(10, Time_p, 1);
+	//glutTimerFunc(10, Time_d, 1);
 	glutMainLoop();
 }
 
@@ -235,30 +236,93 @@ void Time_l(int value) {
 
 void Time_t(int value) {
 
-	glutTimerFunc(10, Time_l, 1);
+	glutTimerFunc(10, Time_t, 1);
 }
 
 void Time_r(int value) {
 
-	glutTimerFunc(10, Time_l, 1);
+	glutTimerFunc(10, Time_r, 1);
 }
 
 void Time_p(int value) {
 
-	glutTimerFunc(10, Time_l, 1);
+	glutTimerFunc(10, Time_p, 1);
+}
+
+void Time_d(int value) {
+
+	glutTimerFunc(10, Time_d, 1);
 }
 
 GLvoid Keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 	case 'l':   // 선에서 삼각형으로
+		if (check_all == false) {
+			check_all = true;
+			check_l = true;
+			printf("l\n");
+			for (int i = 0; i < 4; ++i) {
+				if (check_shape[i] == 2)
+					check_shape[i] = 3;
+			}
+		}
 		break;
 	case 't':   // 삼각형에서 사각형으로
+		if (check_all == false) {
+			check_all = true;
+			check_t = true;
+			printf("t\n");
+			for (int i = 0; i < 4; ++i) {
+				if (check_shape[i] == 3)
+					check_shape[i] = 4;
+			}
+		}
 		break;
 	case 'r':   // 사각형에서 오각형으로 
+		if (check_all == false) {
+			check_all = true;
+			check_r = true;
+			printf("r\n");
+			for (int i = 0; i < 4; ++i) {
+				if (check_shape[i] == 4)
+					check_shape[i] = 5;
+			}
+		}
 		break;
 	case 'p':   // 오각형에서 점으로
+		if (check_all == false) {
+			check_all = true;
+			check_p = true;
+			printf("p\n");
+			for (int i = 0; i < 4; ++i) {
+				if (check_shape[i] == 5)
+					save_check_shape[i] = 1;
+			}
+		}
+		break;
+	case 'd':   // 점에서 선으로
+		if (check_all == false) {
+			check_all = true;
+			check_d = true;
+			printf("d\n");
+			for (int i = 0; i < 4; ++i) {
+				if (check_shape[i] == 1)
+					check_shape[i] = 2;
+			}
+		}
 		break;
 	case 'a':   // 모든 도형 변경
+		if (check_all == false) {
+			check_all = true;
+			printf("a\n");
+			check_l = check_t = check_r = check_p = check_d = true;
+			for (int i = 0; i < 4; ++i) {
+				if (check_shape[i] != 5)
+					check_shape[i] += 1;
+				else
+					save_check_shape[i] = 1;
+			}
+		}
 		break;
 	case 'c':   // 리셋
 		reset();
