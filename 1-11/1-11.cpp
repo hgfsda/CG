@@ -24,34 +24,57 @@ char* filetobuf(const char* file);
 GLuint shaderProgramID; //--- 세이더 프로그램 이름
 GLuint vertexShader; //--- 버텍스 세이더 객체
 GLuint fragmentShader; //--- 프래그먼트 세이더 객체
-float r[6], g[6], b[6];
+float r[18], g[18], b[18];
 int check_shape[4];   // 현재 도형이 무슨 도형인지 확인 1. 점 / 2. 선 / 3, 삼각형 / 4. 사각형 / 5. 오각형
 BOOL check_all, check_l, check_t, check_r, check_p;
 // 0 1 직선 / 2 ~ 5 1사분면 / 6 ~ 9 2사분면 / 10 ~ 13 3사분면 / 14 ~17 4사분면
-GLfloat Shape[18][9];    // 도형의 좌표
-GLfloat colors[18][9];  // 도형 꼭지점의 색상
-GLuint vao[18], vbo[36];
+GLfloat Shape[5][36];    // 도형의 좌표
+GLfloat colors[5][36];  // 도형 꼭지점의 색상
+GLuint vao[5], vbo[10];
 
 void reset() {
 	check_all = check_l = check_t = check_r = check_p = false;
-	for (int i = 0; i < 2; ++i) {
-		for (int j = 0; j < 9; ++j) {
-			Shape[i][j] = 0;
-			colors[i][j] = 0;
-		}
+	for (int j = 0; j < 36; ++j) {
+		Shape[4][j] = 0;
+		colors[4][j] = 0;
 	}
-	Shape[0][0] = Shape[1][4] = 1.0;
-	Shape[0][3] = Shape[1][1] = -1.0;
+	Shape[4][0] = Shape[4][7] = 1.0;
+	Shape[4][3] = Shape[4][10] = -1.0;
 
-	for (int i = 2; i < 6; ++i) {
+	for (int i = 0; i < 4; ++i) {
 		r[i] = (rand() % 101) * 0.01, g[i] = (rand() % 101) * 0.01, b[i] = (rand() % 101) * 0.01;
-		for (int j = 0; j < 9; ++j) {
+		for (int j = 0; j < 36; ++j) {
 			Shape[i][j] = 0;
 			if (j % 3 == 0) colors[i][j] = r[i];
 			else if (j % 3 == 1) colors[i][j] = g[i];
 			else if (j % 3 == 2) colors[i][j] = b[i];
 		}
 	}
+	check_shape[0] = 3;  // 1사분면 삼각형
+	Shape[0][0] = Shape[0][1] = Shape[0][7] = 0.3;
+	Shape[0][3] = 0.5;
+	Shape[0][4] = Shape[0][6] = 0.7;
+
+	check_shape[1] = 2;  // 2사분면 선
+	Shape[1][0] = -0.7;
+	Shape[1][1] = 0.3;
+	Shape[1][3] = -0.3;
+	Shape[1][4] = 0.7;
+
+	check_shape[2] = 4;  // 3사분면 사각형
+	Shape[2][0] = Shape[2][12] = Shape[2][21] = -0.5;
+	Shape[2][1] = Shape[2][6] = Shape[2][10] = Shape[2][13] = Shape[2][18] = Shape[2][19] = Shape[2][22] = Shape[2][24] = -0.3;
+	Shape[2][3] = Shape[2][4] = Shape[2][7] = Shape[2][9] = Shape[2][15] = Shape[2][16] = Shape[2][25] = -0.7;
+	
+	check_shape[3] = 5;  // 4사분면 오각형
+	Shape[3][0] = Shape[3][12] = Shape[3][21] = Shape[3][33] = 0.5;
+	Shape[3][1] = Shape[3][10] = Shape[3][13] = Shape[3][19] = Shape[3][22] = Shape[3][28] = Shape[3][31] = -0.5;
+	Shape[3][3] = Shape[3][15] = 0.4;
+	Shape[3][4] = Shape[3][7] = Shape[3][16] = Shape[3][25] = -0.7;
+	Shape[3][6] = Shape[3][24] = 0.6;
+	Shape[3][9] = Shape[3][27] = 0.3;
+	Shape[3][18] = Shape[3][30] = 0.7;
+	Shape[3][34] = -0.3;
 }
 
 void main(int argc, char** argv)
@@ -71,10 +94,10 @@ void main(int argc, char** argv)
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(Keyboard);
-	glutTimerFunc(10, Time_l, 1);
-	glutTimerFunc(10, Time_t, 1);
-	glutTimerFunc(10, Time_r, 1);
-	glutTimerFunc(10, Time_p, 1);
+	//glutTimerFunc(10, Time_l, 1);
+	//glutTimerFunc(10, Time_t, 1);
+	//glutTimerFunc(10, Time_r, 1);
+	//glutTimerFunc(10, Time_p, 1);
 	glutMainLoop();
 }
 
@@ -87,11 +110,32 @@ GLvoid drawScene() {
 	int PosLocation = glGetAttribLocation(shaderProgramID, "in_Position"); //	: 0  Shader의 'layout (location = 0)' 부분
 	int ColorLocation = glGetAttribLocation(shaderProgramID, "in_Color");
 
-	for (int i = 0; i < 6; ++i) {
-		glBindVertexArray(vao[i]);
-		if (i < 2) {
+	glBindVertexArray(vao[4]);
+	glLineWidth(2);
+	glDrawArrays(GL_LINES, 0, 4);
+
+	for (int i = 0; i < 4; ++i) {
+		if(check_shape[i] == 1) {
+			glBindVertexArray(vao[i]);
 			glPointSize(3);
-			glDrawArrays(GL_LINE_STRIP, 0, 2);
+			glDrawArrays(GL_POINTS, 0, 1);
+		}
+		else if (check_shape[i] == 2) {
+			glBindVertexArray(vao[i]);
+			glLineWidth(3);
+			glDrawArrays(GL_LINES, 0, 2);
+		}
+		else if (check_shape[i] == 3) {
+			glBindVertexArray(vao[i]);
+			glDrawArrays(GL_TRIANGLES, 0, 3);
+		}
+		else if (check_shape[i] == 4) {
+			glBindVertexArray(vao[i]);
+			glDrawArrays(GL_TRIANGLES, 0, 9);
+		}
+		else if (check_shape[i] == 5) {
+			glBindVertexArray(vao[i]);
+			glDrawArrays(GL_TRIANGLES, 0, 12);
 		}
 	}
 
@@ -113,12 +157,12 @@ void InitBuffer()
 	for (int i = 0; i < 5; ++i) {
 		glBindVertexArray(vao[i]);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo[i * 2]);
-		glBufferData(GL_ARRAY_BUFFER, 702 * sizeof(GLfloat), Shape[i], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, 36 * sizeof(GLfloat), Shape[i], GL_STATIC_DRAW);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		glEnableVertexAttribArray(0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vbo[i * 2 + 1]);
-		glBufferData(GL_ARRAY_BUFFER, 702 * sizeof(GLfloat), colors[i], GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, 36 * sizeof(GLfloat), colors[i], GL_STATIC_DRAW);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 		glEnableVertexAttribArray(1);
 	}
@@ -215,6 +259,8 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 	case 'p':   // 오각형에서 점으로
 		break;
 	case 'a':   // 모든 도형 변경
+		break;
+	case 'c':   // 리셋
 		reset();
 		InitBuffer();
 		drawScene();
