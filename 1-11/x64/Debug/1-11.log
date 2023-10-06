@@ -20,11 +20,14 @@ C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\
 C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(89,12): warning C4244: '인수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(240,17): warning C4805: '==': 연산에 'BOOL' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
 C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(244,30): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(245,32): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(245,25): warning C4305: '-=': 'double'에서 'GLfloat'(으)로 잘립니다.
 C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(249,30): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(250,32): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(250,25): warning C4305: '-=': 'double'에서 'GLfloat'(으)로 잘립니다.
 C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(269,17): warning C4805: '==': 연산에 'BOOL' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(276,17): warning C4805: '==': 연산에 'BOOL' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(283,17): warning C4805: '==': 연산에 'BOOL' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(290,17): warning C4805: '==': 연산에 'BOOL' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(273,30): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(274,25): warning C4305: '-=': 'double'에서 'GLfloat'(으)로 잘립니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(275,26): warning C4305: '+=': 'double'에서 'GLfloat'(으)로 잘립니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(294,17): warning C4805: '==': 연산에 'BOOL' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(301,17): warning C4805: '==': 연산에 'BOOL' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\1-11.cpp(308,17): warning C4805: '==': 연산에 'BOOL' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
   1-11.vcxproj -> C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\x64\Debug\1-11.exe

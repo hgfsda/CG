@@ -102,7 +102,7 @@ void main(int argc, char** argv)
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(Keyboard);
 	glutTimerFunc(10, Time_l, 1);
-	//glutTimerFunc(10, Time_t, 1);
+	glutTimerFunc(10, Time_t, 1);
 	//glutTimerFunc(10, Time_r, 1);
 	//glutTimerFunc(10, Time_p, 1);
 	//glutTimerFunc(10, Time_d, 1);
@@ -242,12 +242,12 @@ void Time_l(int value) {
 			if (check_shape[i] == 3 && save_check_shape[i] == 2) {
 				if (move_point[i][0] < 0.2) {
 					move_point[i][0] += 0.01;
-					Shape[i][0] = Shape[i][0] - 0.01;
+					Shape[i][0] -= 0.01;
 				}
 
 				if (move_point[i][1] < 0.39) {
 					move_point[i][1] += 0.01;
-					Shape[i][7] = Shape[i][7] - 0.01;
+					Shape[i][7] -= 0.01;
 				}
 				else {
 					save_check_shape[i] = 3;
@@ -267,7 +267,25 @@ void Time_l(int value) {
 
 void Time_t(int value) {
 	if (check_t == true) {
-
+		for (int i = 0; i < 4; ++i) {
+			if (check_shape[i] == 4 && save_check_shape[i] == 3) {
+				if (move_point[i][0] < 0.2) {
+					move_point[i][0] += 0.01;
+					Shape[i][9] -= 0.01;
+					Shape[i][18] += 0.01;
+				}
+				else {
+					save_check_shape[i] = 4;
+					move_point[i][0] = move_point[i][1] = 0;
+				}
+			}
+		}
+		InitBuffer();
+		drawScene();
+		if (save_check_shape[0] != 3 && save_check_shape[1] != 3 && save_check_shape[2] != 3 && save_check_shape[3] != 3)
+			check_t = false;
+		if (check_l == false && check_t == false && check_r == false && check_p == false && check_d == false)
+			check_all = false;
 	}
 	glutTimerFunc(10, Time_t, 1);
 }
