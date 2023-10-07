@@ -12,6 +12,7 @@ void make_fragmentShaders();
 void make_shaderProgram();
 void InitBuffer();
 void reset();
+void setting_point(int check_shape, int i);
 GLvoid drawScene();
 GLvoid Reshape(int w, int h);
 GLvoid Keyboard(unsigned char key, int x, int y);
@@ -22,11 +23,83 @@ GLuint shaderProgramID; //--- 세이더 프로그램 이름
 GLuint vertexShader; //--- 버텍스 세이더 객체
 GLuint fragmentShader; //--- 프래그먼트 세이더 객체
 float r[15], g[15], b[15];
+int check_shape[15];     // 도형의 종류를 확인   0. 없음 / 1. 점 / 2. 직선 / 3. 삼각형 / 4. 사각형 / 5. 오각형 / 6. 육각형
+int move_check[15];      // 도형이 움직이는 것을 확인  0. 안움직임 / 1. 움직임
+float sx[15], sy[15];    // 도형의 좌표 저장
 GLfloat Shape[15][36];    // 도형의 좌표
 GLfloat colors[15][36];  // 도형 꼭지점의 색상
 GLuint vao[15], vbo[30];
 
 void reset() {
+	int set_cnt_shape = 0;
+	for (int i = 0; i < 15; ++i) {
+		if (i % 3 == 0)
+			++set_cnt_shape;
+		check_shape[i] = set_cnt_shape;
+		move_check[i] = 0;
+		sx[i] = (rand() % 201 - 100) * 0.01;
+		sy[i] = (rand() % 201 - 100) * 0.01;
+
+		r[i] = (rand() % 101) * 0.01, g[i] = (rand() % 101) * 0.01, b[i] = (rand() % 101) * 0.01;
+		for (int j = 0; j < 36; ++j) {
+			Shape[i][j] = 0;
+			if (j % 3 == 0) colors[i][j] = r[i];
+			else if (j % 3 == 1) colors[i][j] = g[i];
+			else if (j % 3 == 2) colors[i][j] = b[i];
+		}
+		setting_point(check_shape[i], i);
+	} 
+}
+
+void setting_point(int check_shape, int i) {
+	if (check_shape == 1) {
+		Shape[i][0] = sx[i];
+		Shape[i][1] = sy[i];
+	}
+	else if (check_shape == 2) {
+		Shape[i][0] = sx[i] + 0.1;
+		Shape[i][1] = sy[i] + 0.1;
+		Shape[i][3] = sx[i] - 0.1;
+		Shape[i][4] = sy[i] - 0.1;
+	}
+	else if (check_shape == 3) {
+		Shape[i][0] = sx[i];
+		Shape[i][1] = sy[i] + 0.1;
+		Shape[i][3] = sx[i] - 0.1;
+		Shape[i][4] = sy[i] - 0.1;
+		Shape[i][6] = sx[i] + 0.1;
+		Shape[i][7] = sy[i] - 0.1;
+	}
+	else if (check_shape == 4) {
+		Shape[i][0] = sx[i] - 0.1;
+		Shape[i][1] = sy[i] + 0.1;
+		Shape[i][3] = Shape[i][12] = sx[i] - 0.1;
+		Shape[i][4] = Shape[i][13] = sy[i] - 0.1;
+		Shape[i][6] = Shape[i][15] = sx[i] + 0.1;
+		Shape[i][7] = Shape[i][16] = sy[i] + 0.1;
+		Shape[i][9] = sx[i] + 0.1;
+		Shape[i][10] = sy[i] - 0.1;
+	}
+	else if (check_shape == 5) {
+		Shape[i][0] = Shape[i][15] = Shape[i][24] = sx[i];
+		Shape[i][1] = Shape[i][16] = Shape[i][25] = sy[i] + 0.1;
+		Shape[i][3] = Shape[i][12] = sx[i] - 0.05;
+		Shape[i][4] = Shape[i][13] = sy[i] - 0.1;
+		Shape[i][6] = Shape[i][21] = sx[i] + 0.05;
+		Shape[i][7] = Shape[i][22] = sy[i] - 0.1;
+		Shape[i][9] = sx[i] - 0.1;
+		Shape[i][18] = sx[i] + 0.1;
+		Shape[i][10] = Shape[i][19] = sy[i];
+	}
+	else if (check_shape == 6) {
+		Shape[i][0] = Shape[i][9] = Shape[i][18] = Shape[i][27] = Shape[i][15] = Shape[i][21] = sx[i];
+		Shape[i][1] = Shape[i][10] = Shape[i][19] = Shape[i][28] = sy[i] + 0.1;
+		Shape[i][3] = Shape[i][6] = Shape[i][12] = sx[i] - 0.1;
+		Shape[i][4] = Shape[i][13] = Shape[i][25] = Shape[i][31] = sy[i] - 0.05;
+		Shape[i][7] = Shape[i][34] = sy[i] + 0.05;
+		Shape[i][16] = Shape[i][22] = sy[i] - 0.1;
+		Shape[i][24] = Shape[i][30] = Shape[i][33] = sx[i] + 0.1;
+	}
 }
 
 void main(int argc, char** argv)
@@ -58,7 +131,34 @@ GLvoid drawScene() {
 	int PosLocation = glGetAttribLocation(shaderProgramID, "in_Position"); //	: 0  Shader의 'layout (location = 0)' 부분
 	int ColorLocation = glGetAttribLocation(shaderProgramID, "in_Color");
 
-
+	for (int i = 0; i < 15; ++i) {
+		if (check_shape[i] == 1) {
+			glBindVertexArray(vao[i]);
+			glPointSize(5);
+			glDrawArrays(GL_POINTS, 0, 1);
+		}
+		else if (check_shape[i] == 2) {
+			glBindVertexArray(vao[i]);
+			glLineWidth(3);
+			glDrawArrays(GL_LINES, 0, 2);
+		}
+		else if (check_shape[i] == 3) {
+			glBindVertexArray(vao[i]);
+			glDrawArrays(GL_TRIANGLES, 0, 3);
+		}
+		else if (check_shape[i] == 4) {
+			glBindVertexArray(vao[i]);
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
+		else if (check_shape[i] == 5) {
+			glBindVertexArray(vao[i]);
+			glDrawArrays(GL_TRIANGLES, 0, 9);
+		}
+		else if (check_shape[i] == 6) {
+			glBindVertexArray(vao[i]);
+			glDrawArrays(GL_TRIANGLES, 0, 12);
+		}
+	}
 	glEnableVertexAttribArray(PosLocation);
 	glEnableVertexAttribArray(ColorLocation);
 
