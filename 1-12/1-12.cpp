@@ -17,6 +17,7 @@ GLvoid drawScene();
 GLvoid Reshape(int w, int h);
 GLvoid Keyboard(unsigned char key, int x, int y);
 void Mouse(int button, int state, int x, int y);
+void Motion(int x, int y);
 char* filetobuf(const char* file);
 
 GLuint shaderProgramID; //--- 세이더 프로그램 이름
@@ -24,14 +25,18 @@ GLuint vertexShader; //--- 버텍스 세이더 객체
 GLuint fragmentShader; //--- 프래그먼트 세이더 객체
 float r[15], g[15], b[15];
 int check_shape[15];     // 도형의 종류를 확인   0. 없음 / 1. 점 / 2. 직선 / 3. 삼각형 / 4. 사각형 / 5. 오각형 / 6. 육각형
-int move_check[15];      // 도형이 움직이는 것을 확인  0. 안움직임 / 1. 움직임
+int move_check[15];      // 도형이 움직이는 것을 확인  0. 안움직임 / 1. 대각선 / 2. 지그재그
+int check_num;           // 현재 선택된 도형
 float sx[15], sy[15];    // 도형의 좌표 저장
+BOOL left_button;
 GLfloat Shape[15][36];    // 도형의 좌표
 GLfloat colors[15][36];  // 도형 꼭지점의 색상
 GLuint vao[15], vbo[30];
 
 void reset() {
 	int set_cnt_shape = 0;
+	left_button = false;
+	check_num = 15;
 	for (int i = 0; i < 15; ++i) {
 		if (i % 3 == 0)
 			++set_cnt_shape;
@@ -119,6 +124,8 @@ void main(int argc, char** argv)
 	glutDisplayFunc(drawScene);
 	glutReshapeFunc(Reshape);
 	glutKeyboardFunc(Keyboard);
+	glutMouseFunc(Mouse);
+	glutMotionFunc(Motion);
 	glutMainLoop();
 }
 
@@ -250,8 +257,6 @@ void make_fragmentShaders()
 
 GLvoid Keyboard(unsigned char key, int x, int y) {
 	switch (key) {
-	case 'm':
-		break;
 	case 'r':   // 리셋
 		reset();
 		InitBuffer();
@@ -269,7 +274,32 @@ void Mouse(int button, int state, int x, int y) {
 
 	normalized_x = (2.0 * x / 800) - 1.0;
 	normalized_y = 1.0 - (2.0 * y / 600);
+	if (button == GLUT_LEFT_BUTTON)
+		for (int i = 14; i >= 0; --i) {
+			if (normalized_x > sx[i] - 0.1 && normalized_x < sx[i] + 0.1 && normalized_y > sy[i] - 0.1 && normalized_y < sy[i] + 0.1) {
+				left_button = true;
+				check_num = i;
+				return;
+			}
+			else
+				check_num = 15;
+		}
 }
+
+void Motion(int x, int y) {
+	float normalized_x, normalized_y;
+
+	normalized_x = (2.0 * x / 800) - 1.0;
+	normalized_y = 1.0 - (2.0 * y / 600);
+	if (left_button == true) {
+		sx[check_num] = normalized_x;
+		sy[check_num] = normalized_y;
+	}
+	setting_point(check_shape[check_num], check_num);
+	InitBuffer();
+	drawScene();
+}
+
 
 char* filetobuf(const char* file)
 {
