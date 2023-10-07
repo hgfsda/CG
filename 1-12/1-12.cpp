@@ -269,12 +269,19 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 	}
 }
 
+void change_shape(int check_shape[15], int check_num, int i) {
+	check_shape[check_num] += check_shape[i];
+	if (check_shape[check_num] > 6)
+		check_shape[check_num] -= 6;
+	check_shape[i] = 0;
+}
+
 void Mouse(int button, int state, int x, int y) {
 	float normalized_x, normalized_y;
 
 	normalized_x = (2.0 * x / 800) - 1.0;
 	normalized_y = 1.0 - (2.0 * y / 600);
-	if (button == GLUT_LEFT_BUTTON)
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 		for (int i = 14; i >= 0; --i) {
 			if (normalized_x > sx[i] - 0.1 && normalized_x < sx[i] + 0.1 && normalized_y > sy[i] - 0.1 && normalized_y < sy[i] + 0.1) {
 				left_button = true;
@@ -284,6 +291,19 @@ void Mouse(int button, int state, int x, int y) {
 			else
 				check_num = 15;
 		}
+	}
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
+		for (int i = 14; i >= 0; --i) {
+			if (i != check_num) {
+				if (normalized_x > sx[i] - 0.1 && normalized_x < sx[i] + 0.1 && normalized_y > sy[i] - 0.1 && normalized_y < sy[i] + 0.1) {
+					change_shape(check_shape, check_num, i);
+				}
+			}
+		}
+		setting_point(check_shape[check_num], check_num);
+		InitBuffer();
+		drawScene();
+	}
 }
 
 void Motion(int x, int y) {
@@ -306,15 +326,15 @@ char* filetobuf(const char* file)
 	FILE* fptr;
 	long length;
 	char* buf;
-	fptr = fopen(file, "rb"); // Open file for reading 
-	if (!fptr) // Return NULL on failure 
+	fptr = fopen(file, "rb");
+	if (!fptr)
 		return NULL;
-	fseek(fptr, 0, SEEK_END); // Seek to the end of the file 
-	length = ftell(fptr); // Find out how many bytes into the file we are 
-	buf = (char*)malloc(length + 1); // Allocate a buffer for the entire length of the file and a null terminator 
-	fseek(fptr, 0, SEEK_SET); // Go back to the beginning of the file 
-	fread(buf, length, 1, fptr); // Read the contents of the file in to the buffer 
-	fclose(fptr); // Close the file 
-	buf[length] = 0; // Null terminator 
-	return buf; // Return the buffer 
+	fseek(fptr, 0, SEEK_END);
+	length = ftell(fptr);
+	buf = (char*)malloc(length + 1);
+	fseek(fptr, 0, SEEK_SET);
+	fread(buf, length, 1, fptr);
+	fclose(fptr);
+	buf[length] = 0;
+	return buf;
 }
