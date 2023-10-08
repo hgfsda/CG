@@ -189,7 +189,26 @@ void Mouse(int button, int state, int x, int y) {
 
 	normalized_x = (2.0 * x / 800) - 1.0;
 	normalized_y = 1.0 - (2.0 * y / 600);
-	if (button == GLUT_LEFT_BUTTON) {
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		if (normalized_x > Shape[1][0] - 0.05 && normalized_x < Shape[1][0] + 0.05 && normalized_y > Shape[1][1] - 0.05 && normalized_y < Shape[1][1] + 0.05) {
+			quadrant = 1;
+			left_button = true;
+		}
+		else if (normalized_x > Shape[1][3] - 0.05 && normalized_x < Shape[1][3] + 0.05 && normalized_y > Shape[1][4] - 0.05 && normalized_y < Shape[1][4] + 0.05) {
+			quadrant = 2;
+			left_button = true;
+		}
+		else if (normalized_x > Shape[1][6] - 0.05 && normalized_x < Shape[1][6] + 0.05 && normalized_y > Shape[1][7] - 0.05 && normalized_y < Shape[1][7] + 0.05) {
+			quadrant = 3;
+			left_button = true;
+		}
+		else if (normalized_x > Shape[1][9] - 0.05 && normalized_x < Shape[1][9] + 0.05 && normalized_y > Shape[1][10] - 0.05 && normalized_y < Shape[1][10] + 0.05) {
+			quadrant = 4;
+			left_button = true;
+		}
+	}
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
+		quadrant = 0;
 	}
 }
 
@@ -198,7 +217,48 @@ void Motion(int x, int y) {
 
 	normalized_x = (2.0 * x / 800) - 1.0;
 	normalized_y = 1.0 - (2.0 * y / 600);
-
+	if (left_button == true) {
+		if (quadrant == 1) {
+			if (normalized_x > 0 && normalized_y > 0) {
+				Shape[1][0] = normalized_x;
+				Shape[1][1] = normalized_y;
+			}
+			else {
+				left_button = false;
+				quadrant = 0;
+			}
+		}
+		else if (quadrant == 2) {
+			if (normalized_x < 0 && normalized_y > 0) {
+				Shape[1][3] = normalized_x;
+				Shape[1][4] = normalized_y;
+			}
+			else {
+				left_button = false;
+				quadrant = 0;
+			}
+		}
+		else if (quadrant == 3) {
+			if (normalized_x < 0 && normalized_y < 0) {
+				Shape[1][6] = normalized_x;
+				Shape[1][7] = normalized_y;
+			}
+			else {
+				left_button = false;
+				quadrant = 0;
+			}
+		}
+		else if (quadrant == 4) {
+			if (normalized_x > 0 && normalized_y < 0) {
+				Shape[1][9] = normalized_x;
+				Shape[1][10] = normalized_y;
+			}
+			else {
+				left_button = false;
+				quadrant = 0;
+			}
+		}
+	}
 	InitBuffer();
 	drawScene();
 }
