@@ -13,6 +13,7 @@ void make_shaderProgram();
 void InitBuffer();
 void reset();
 void setting_point(int check_shape, int i);
+void Time(int value);
 GLvoid drawScene();
 GLvoid Reshape(int w, int h);
 GLvoid Keyboard(unsigned char key, int x, int y);
@@ -27,6 +28,7 @@ float r[15], g[15], b[15];
 int check_shape[15];     // 도형의 종류를 확인   0. 없음 / 1. 점 / 2. 직선 / 3. 삼각형 / 4. 사각형 / 5. 오각형 / 6. 육각형
 int move_check[15];      // 도형이 움직이는 것을 확인  0. 안움직임 / 1. 대각선 / 2. 지그재그
 int check_num;           // 현재 선택된 도형
+int dir[15];
 float sx[15], sy[15];    // 도형의 좌표 저장
 BOOL left_button;
 GLfloat Shape[15][36];    // 도형의 좌표
@@ -41,7 +43,7 @@ void reset() {
 		if (i % 3 == 0)
 			++set_cnt_shape;
 		check_shape[i] = set_cnt_shape;
-		move_check[i] = 0;
+		move_check[i] = dir[i] = 0;
 		sx[i] = (rand() % 201 - 100) * 0.01;
 		sy[i] = (rand() % 201 - 100) * 0.01;
 
@@ -126,6 +128,7 @@ void main(int argc, char** argv)
 	glutKeyboardFunc(Keyboard);
 	glutMouseFunc(Mouse);
 	glutMotionFunc(Motion);
+	glutTimerFunc(10, Time, 1);
 	glutMainLoop();
 }
 
@@ -269,11 +272,65 @@ GLvoid Keyboard(unsigned char key, int x, int y) {
 	}
 }
 
-void change_shape(int check_shape[15], int check_num, int i) {
+void change_shape(int check_num, int i) {
 	check_shape[check_num] += check_shape[i];
 	if (check_shape[check_num] > 6)
 		check_shape[check_num] -= 6;
 	check_shape[i] = 0;
+	r[check_num] = (r[check_num] + r[i]) / 2;
+	g[check_num] = (g[check_num] + g[i]) / 2;
+	b[check_num] = (b[check_num] + b[i]) / 2;
+	for (int j = 0; j < 36; ++j) {
+		if (j % 3 == 0) colors[check_num][j] = r[i];
+		else if (j % 3 == 1) colors[check_num][j] = g[i];
+		else if (j % 3 == 2) colors[check_num][j] = b[i];
+	}
+}
+
+void Time(int value) {
+	for (int i = 0; i < 15; ++i) {
+		if (move_check[i] == 1) {
+			if (dir[i] == 0) {  // 오른쪽 위로 이동
+				sx[i] = sx[i] + 0.01;
+				sy[i] = sy[i] + 0.01;
+				if (sx[i] + 0.1 >= 1.0)
+					dir[i] = 1;
+				if (sy[i] + 0.1 >= 1.0)
+					dir[i] = 3;
+			}
+			else if (dir[i] == 1) {  // 왼쪽 위로 이동
+				sx[i] = sx[i] - 0.01;
+				sy[i] = sy[i] + 0.01;
+				if (sx[i] - 0.1 <= -1.0)
+					dir[i] = 0;
+				if (sy[i] + 0.1 >= 1.0)
+					dir[i] = 2;
+			}
+			else if (dir[i] == 2) {  // 왼쪽 아래로 이동
+				sx[i] = sx[i] - 0.01;
+				sy[i] = sy[i] - 0.01;
+				if (sx[i] - 0.1 <= -1.0)
+					dir[i] = 3;
+				if (sy[i] - 0.1 <= -1.0)
+					dir[i] = 1;
+			}
+			else if (dir[i] == 3) {  // 오른쪽 아래로 이동
+				sx[i] = sx[i] + 0.01;
+				sy[i] = sy[i] - 0.01;
+				if (sx[i] + 0.1 >= 1.0)
+					dir[i] = 2;
+				if (sy[i] - 0.1 <= -1.0)
+					dir[i] = 0;
+			}
+			setting_point(check_shape[i], i);
+			InitBuffer();
+			drawScene();
+		}
+		else if (move_check[i] == 2) {
+
+		}
+	}
+	glutTimerFunc(10, Time, 1);
 }
 
 void Mouse(int button, int state, int x, int y) {
@@ -283,24 +340,31 @@ void Mouse(int button, int state, int x, int y) {
 	normalized_y = 1.0 - (2.0 * y / 600);
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 		for (int i = 14; i >= 0; --i) {
-			if (normalized_x > sx[i] - 0.1 && normalized_x < sx[i] + 0.1 && normalized_y > sy[i] - 0.1 && normalized_y < sy[i] + 0.1) {
-				left_button = true;
-				check_num = i;
-				return;
+			if (check_shape[i] != 0) {
+				if (normalized_x > sx[i] - 0.1 && normalized_x < sx[i] + 0.1 && normalized_y > sy[i] - 0.1 && normalized_y < sy[i] + 0.1) {
+
+					left_button = true;
+					check_num = i;
+					if (move_check[i] == 1 || move_check[i] == 2)
+						move_check[i] = 0;
+					return;
+				}
+				else
+					check_num = 15;
 			}
-			else
-				check_num = 15;
 		}
 	}
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) {
 		for (int i = 14; i >= 0; --i) {
-			if (i != check_num) {
+			if (i != check_num && check_shape[i] != 0) {
 				if (normalized_x > sx[i] - 0.1 && normalized_x < sx[i] + 0.1 && normalized_y > sy[i] - 0.1 && normalized_y < sy[i] + 0.1) {
-					change_shape(check_shape, check_num, i);
+					change_shape(check_num, i);
+					setting_point(check_shape[check_num], check_num);
+					move_check[check_num] = 1;
+					break;
 				}
 			}
 		}
-		setting_point(check_shape[check_num], check_num);
 		InitBuffer();
 		drawScene();
 	}

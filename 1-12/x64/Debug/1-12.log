@@ -1,44 +1,52 @@
 ﻿  1-12.cpp
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(45,32): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(46,32): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(48,25): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(48,55): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(48,85): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(65,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(66,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(47,32): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(48,32): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(50,25): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(50,55): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(50,85): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(67,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(68,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(72,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(73,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(69,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(70,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(74,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(75,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(76,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(79,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(80,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(81,38): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(82,38): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(77,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(78,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(81,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(82,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(83,38): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(84,38): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(85,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(86,24): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(90,53): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(91,38): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(92,38): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(85,38): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(86,38): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(87,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(88,24): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(92,53): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(93,38): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(94,38): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(95,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(96,24): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(101,68): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(102,52): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(95,38): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(96,38): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(97,23): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(98,24): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(103,68): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(104,38): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(105,39): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(106,54): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(111,1): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(112,12): warning C4244: '인수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(282,33): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(283,21): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(312,33): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(313,21): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(314,21): warning C4805: '==': 연산에 'BOOL' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(104,52): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(105,68): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(106,38): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(107,39): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(108,54): warning C4244: '=': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(113,1): warning C4326: 'main'의 반환 형식이 'int'이어야 하는데 'void'입니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(114,12): warning C4244: '인수': 'time_t'에서 'unsigned int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(294,19): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(295,19): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(302,19): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(303,19): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(310,19): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(311,19): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(318,19): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(319,19): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(339,33): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(340,21): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(376,33): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(377,21): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-12\1-12.cpp(378,21): warning C4805: '==': 연산에 'BOOL' 형식과 'bool' 형식을 함께 사용하는 것은 안전하지 않습니다.
   1-12.vcxproj -> C:\Users\정태연\OneDrive\바탕 화면\대학\컴퓨터 그래픽스\CG\1-11\x64\Debug\1-12.exe
