@@ -28,7 +28,8 @@ float r[15], g[15], b[15];
 int check_shape[15];     // 도형의 종류를 확인   0. 없음 / 1. 점 / 2. 직선 / 3. 삼각형 / 4. 사각형 / 5. 오각형 / 6. 육각형
 int move_check[15];      // 도형이 움직이는 것을 확인  0. 안움직임 / 1. 대각선 / 2. 지그재그
 int check_num;           // 현재 선택된 도형
-int dir[15];
+int dir[15];               // 방향 설정
+int save_location_cnt[15];   // 지그재그 올라가는 위치 내려가는 위치 설정
 float sx[15], sy[15];    // 도형의 좌표 저장
 BOOL left_button;
 GLfloat Shape[15][36];    // 도형의 좌표
@@ -43,7 +44,8 @@ void reset() {
 		if (i % 3 == 0)
 			++set_cnt_shape;
 		check_shape[i] = set_cnt_shape;
-		move_check[i] = dir[i] = 0;
+		move_check[i] = save_location_cnt[i] = 0;
+		dir[i] = rand() % 4;
 		sx[i] = (rand() % 201 - 100) * 0.01;
 		sy[i] = (rand() % 201 - 100) * 0.01;
 
@@ -323,13 +325,73 @@ void Time(int value) {
 					dir[i] = 0;
 			}
 			setting_point(check_shape[i], i);
-			InitBuffer();
-			drawScene();
 		}
 		else if (move_check[i] == 2) {
-
+			if (dir[i] == 0) {  // 오른쪽 이동 후 아래로 이동
+				if (sx[i] + 0.1 < 1.0) {
+					sx[i] = sx[i] + 0.01;
+				}
+				else {
+					sy[i] = sy[i] - 0.01;
+					++save_location_cnt[i];
+					if (save_location_cnt[i] == 20) {
+						save_location_cnt[i] = 0;
+						dir[i] = 1;
+					}
+					if (sy[i] - 0.1 <= -1.0)
+						dir[i] = 3;
+				}
+			}
+			else if (dir[i] == 1) {  // 왼쪽 이동 후 아래로 이동
+				if (sx[i] - 0.1 > -1.0) {
+					sx[i] = sx[i] - 0.01;
+				}
+				else {
+					sy[i] = sy[i] - 0.01;
+					++save_location_cnt[i];
+					if (save_location_cnt[i] == 20) {
+						save_location_cnt[i] = 0;
+						dir[i] = 0;
+					}
+					if (sy[i] - 0.1 <= -1.0)
+						dir[i] = 2;
+				}
+			}
+			else if (dir[i] == 2) {  // 오른쪽 이동 후 위로 이동
+				if (sx[i] + 0.1 < 1.0) {
+					sx[i] = sx[i] + 0.01;
+				}
+				else {
+					sy[i] = sy[i] + 0.01;
+					++save_location_cnt[i];
+					if (save_location_cnt[i] == 20) {
+						save_location_cnt[i] = 0;
+						dir[i] = 3;
+					}
+					if (sy[i] + 0.1 >= 1.0)
+						dir[i] = 1;
+				}
+			}
+			else if (dir[i] == 3) {  // 왼쪽 이동 후 위로 이동
+				if (sx[i] - 0.1 > -1.0) {
+					sx[i] = sx[i] - 0.01;
+				}
+				else {
+					sy[i] = sy[i] + 0.01;
+					++save_location_cnt[i];
+					if (save_location_cnt[i] == 20) {
+						save_location_cnt[i] = 0;
+						dir[i] = 2;
+					}
+					if (sy[i] + 0.1 >= 1.0)
+						dir[i] = 0;
+				}
+			}
+			setting_point(check_shape[i], i);
 		}
 	}
+	InitBuffer();
+	drawScene();
 	glutTimerFunc(10, Time, 1);
 }
 
@@ -360,7 +422,7 @@ void Mouse(int button, int state, int x, int y) {
 				if (normalized_x > sx[i] - 0.1 && normalized_x < sx[i] + 0.1 && normalized_y > sy[i] - 0.1 && normalized_y < sy[i] + 0.1) {
 					change_shape(check_num, i);
 					setting_point(check_shape[check_num], check_num);
-					move_check[check_num] = 1;
+					move_check[check_num] = rand()%2 + 1;
 					break;
 				}
 			}
